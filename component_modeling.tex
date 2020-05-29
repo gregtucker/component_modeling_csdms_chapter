@@ -19,36 +19,47 @@
 
 \maketitle
 
+[COULD USE A BETTER TITLE...]
+
+[NOTE: LET'S CHALLENGE OURSELVES TO USE ACTIVE VOICE. SQUASH `TO BE' EVERYWHERE WE CAN!]
+
+[ALSO: NOTHING WRONG WITH BRINGING A SENSE OF HUMOR TO SCIENCE WRITING]
+
+\section*{Abstract}
+
+...
+
+
 \section{Introduction}
 
-Computational models play a vital role in the earth and environmental sciences. They embody theory in a quantitative and algorithmic form. By performing a multitude of high-speed calculations, numerical models extend our cognitive abilities, helping us explore and visualize the consequences of hypotheses. They allow us to apply existing theory to new situations. And, where the processes are sufficiently well understood, models can provide valuable forecasts of the potential trajectories of natural and anthropogenically perturbed earth systems.
+Computational models play a vital role in the earth and environmental sciences. They embody theory in a quantitative and algorithmic form. By performing calculations at blinding speed, numerical models also extend our cognitive abilities, helping us explore and visualize the consequences of hypotheses. They allow us to apply existing theory to new situations. And, where the processes are sufficiently well understood, models can provide valuable forecasts of the potential trajectories of natural and anthropogenically perturbed earth systems.
 
-Computational modeling comes with a cost, however. The software behind computational models is usually time consuming and expensive to create, modify, apply, and maintain. Time spent developing, testing, and debugging software is time taken away from other aspects of research and practice. In addition, scientific results that rely on software are only as robust and reproducible as the software itself. Furthermore, scientific software demands quality control: errors in scientific software not only impede research, but also---especially in an applied context---produce misleading results that lead to more serious consequences [REFS]. Finally, the fact that modeling is both useful and technically challenging can give rise to a pernitious temptation: to use the wrong model for the job simply because the code that implements it is more accessible than any (better) alternatives. 
+Computational modeling comes with a cost, however. Creating, modifying, applying, and maintaining the software costs time and money. The effort spent developing, testing, and debugging software means less effort devoted to other aspects of research and practice. In addition, scientific results that rely on software are only as robust and reproducible as the software itself. Furthermore, scientific software demands quality control: errors in scientific software not only impede research, but also---especially in an applied context---produce misleading results that lead to more serious consequences. Finally, the fact that modeling is both useful and technically challenging can give rise to a pernitious temptation: to use the wrong model for the job simply because the code that implements it is more accessible than any better alternatives. 
 
 The promise and challenges associated with environmental modeling highlight the need for a community software infrastructure that maximizes flexibility, creativity, and reliability while minimizing technical overhead. To use an artistic analogy: an ideal modeling infrastructure should provide the geo-artist with a wide palette of colors, while making it easy to mix new ones, so that more time can be devoted to creating, and less time to fussing with materials; at the same time, those materials have to be robust enough that the colors and textures will not degrade over time.
 
-In this contribution, we describe a set of software tools, standards, and practices that we believe can enhance research productivity by reducing the ``time to science'' in environmental modeling. These tools and concepts reflect the authors' experience with the Community Surface Dynamics Modeling System (CSDMS). Founded in 2007 with support from the US National Science Foundation, CSDMS is a facility that supports and promotes computational modeling of diverse earth-surface processes, including geomorphology, sedimentology, marine geology, hydrology, and related aspects of geodynamics, geochemistry, soils, ecosystems, and human dimensions. We present tools and standards developed by and for the CSDMS community. We also describe a set of effective engineering practices that are well known among professional software developers but less known among geoscientists and environmental scientists. In addition, we identify several emerging needs and highlight some recent efforts to address them within the surface-earth geosciences.
+In this contribution, we describe a set of software tools, standards, and practices that we believe can enhance research productivity by reducing the ``time to science'' in environmental modeling. These tools and concepts reflect the authors' experience with the Community Surface Dynamics Modeling System (CSDMS). Founded in 2007 with support from the US National Science Foundation, CSDMS is a facility that supports and promotes computational modeling of diverse earth-surface processes, including geomorphology, sedimentology, marine geology, hydrology, and related aspects of geodynamics, geochemistry, soils, ecosystems, and human dimensions. We present tools and standards developed by and for the CSDMS community. We also describe a set of effective engineering practices that are well known among professional software developers but less known among geoscientists and environmental scientists. In addition, we highlight aspects of the human element: community engagement and education turn out to be key elements in forging a shared and ever-improving computational ecosystem. Finally, we identify several emerging needs and highlight some recent efforts to address them within the surface-earth geosciences.
 
-Summarize structure of the paper...
+We start with a general background review of issues in scientific computing and research software across the sciences (Section~\ref{sec:background}), and a brief review of CSDMS (Section~\ref{sec:csdms}). Section~\ref{sec:taxonomy} frames the operational tasks involved in modeling as a six-fold spectrum, ranging from simply executing a model program, to building a complete model from scratch. This sets the stage for a review of tools and practices designed to make these various tasks more efficient and their products more sustainable, through sharing, standardization, education, and a set of enabling tools (Sections~\ref{sec:workbench}--\ref{sec:community}). We conclude with a discussion of opportunities, needs, and challenges (Section~\ref{sec:discussion}).
 
 
-\section{Background: Opportunities and Challenges}
+\section{Background}
+\label{sec:background}
 
 \subsection{Scientific computing is here to stay}
 
-Computing has emerged as a new pillar of scientific inquiry, alongside theory, experiment, and direct observation  \citep{pitac2005computational}. The ability to perform calculations at speeds that would have astonished researchers of our grandparents' generation continues to open up new territory across the sciences, and allows us to probe the limits to predictability in natural and engineered systems \citep{post2005computational,post2013changing}. Computing, and the software that supports it, underlies plenty of recent success stories, from improved hurricane forecasting to the imaging of black holes. Within the sphere of computing, numerical modeling plays a central role. Computational models both encapsulate theory in the form of numerical algorithms, and provide machinery with which to explore the consequences of that theory. \citet{pipitone2012assessing} described climate models as ``executable theories of climate.'' More generally, numerical models in earth and environmental science embody executable theory for all sorts of aspects of the natural world. At the same time, the numerical algorithms and software that implements them provide a kind of mind-enhancing machinery. Whereas other scientific technology extends our senses---allow us to ``see'' what lies beyond the visible spectrum, to ``feel'' the vibrations in the earth, to ``smell'' tiny amounts of this or that chemical in a sample---computational modeling extends our cognitive capacity. By turning ideas into algorithms into software, we gain the ability to explore the logical consequences of our ideas, make predictions, and compare them with observations. Discovery comes not only when the calculations provide self-consistent explanations for otherwise mysterious phenomena, but also (especially) when the calculations surprise us, revealing a logic trail that leads to a different place than we had previously imagined \citep{bras2003six}.
+Computing has emerged as a new pillar of scientific inquiry, alongside theory, experiment, and direct observation  \citep{pitac2005computational}. The ability to perform calculations at speeds that would have astonished researchers of our grandparents' generation continues to open up new territory across the sciences, and allows us to probe the limits to predictability in natural and engineered systems \citep{post2005computational,post2013changing}. Computing, and the software that supports it, underlies plenty of recent success stories, from improved hurricane forecasting to the imaging of black holes. Within the sphere of computing, numerical modeling plays a central role. Computational models both encapsulate theory in the form of numerical algorithms, and provide machinery with which to explore the consequences of that theory. \citet{pipitone2012assessing} described climate models as ``executable theories of climate.'' More generally, numerical models in earth and environmental science embody executable theory for all sorts of aspects of the natural world. At the same time, the numerical algorithms and software that implements them provide a kind of mind-enhancing machinery. Whereas other scientific technology extends our senses---allow us to ``see'' what lies beyond the visible spectrum, to ``feel'' the vibrations in the earth, to ``smell'' tiny amounts of this or that chemical in a sample---computational modeling extends our cognitive capacity. By turning ideas into algorithms into software, we gain the ability to explore the logical consequences of our ideas, make predictions, and compare them with observations. Discovery comes not only when the calculations provide self-consistent explanations for otherwise mysterious phenomena, but also (especially) when the calculations surprise us, revealing a logic trail that leads to new insights \citep{bras2003six}.
 
 %Scientific computing encompasses more than just numerical modeling. Here our focus is primarily on computational algorithms that embody concepts about processes, as opposed to purely statistical methods. Nonetheless, it is worth considering that the distinction between computational modeling and other forms of scientific computing can be blurry. Consider, for example, that many forms of data processing, such as deriving a vegetation index map from a satellite image, involve applying some form of algorithmic theory to a set of quantitative observations. Likewise, some concepts that one might view as ``process based'' actually build on empirical correlations; for example, material stress-strain relationships usually derive from fitting curves to data from laboratory experiments.
 
-Computing also converts primary observations from instruments or experiments into data that we can use. In remote sensing, for example, computational algorithms turn raw binary information from sensors into measurements of topography, land cover, vegetation properties, and any number of other attributes. This kind of data processing is also a form of modeling: applying a theory (often statistical or black-box in nature) to a set of numbers in order to map or otherwise estimate a phenomenon of interest. More generally, software today forms a key piece of sustainable data management, sharing, and reuse \citep[e.g.,[]{hsu2015data}.
+Computing also converts primary observations from instruments or experiments into data that we can use. In remote sensing, for example, computational algorithms turn raw binary information into measurements of topography, land cover, vegetation properties, and any number of other attributes. This kind of data processing is also a form of modeling: applying a theory (often statistical or black-box in nature) to a set of numbers in order to map or otherwise estimate a phenomenon of interest. More generally, software today forms a key piece of sustainable data management, sharing, and reuse \citep[e.g.,][]{hsu2015data}.
 
 With the rapid growth in computing and digital infrastructure, many scientists now devote a large fraction of their research time to developing software \citep{hannay2009scientists,prabhu2011survey,wilson2014best,singh2016unsung,pinto2018scientists}. A survey of nearly 2000 researchers in 40 countries by \citet{hannay2009scientists} revealed that 84\% of respondents considered software development important for their research. According to their findings and those of \citet{prabhu2011survey}, both of which span multiple disciplines, scientists spend as much as a third of their time developing software. In the geosciences as in other disciplines, software has become critical research infrastructure: as vital and worthy of maintenance as ships, telescopes, and seismographic arrays. Yet the invisibility of software \citep[e.g.,][]{eghbal2016roads} has led to challenges in developing and sustaining this critical research infrastructure.
 
-ADD PARAGRAPH ON PROMISE OF STANDARDARDIZED, INTEROPERABLE MODELING AND FRAMEWORKS
 
 \subsection{Growing pains}
 
-Experimental science absolutely depends on having high-quality laboratory infrastructure, and operating it with careful, systematic protocols. In this respect, computational science differs only in the invisibility of its infrastructure. Experimental research methods, with their emphasis on transparency and replicability, pre-date computational science by over 200 years \citep{wilson2006s,fomel2009reproducible}, and so it comes as no surprise that computational science has experienced growing pains. Errors in software have can have serious consequences for research. Software faults led to the failure of the Mars Climate Orbiter mission in 19XX, and of the Arianne rocket XXX. In 2006??, discovery of a bug in image-processing software led to the retraction of YY papers in computational biochemistry (do I have that right?) \citep{miller2006scientists}. High-profile cases like these have sparked concern about the quality and reliability of research software. Studies of scientific software development practices some support for these concerns, suggesting that the practice of formal testing of code correctness remains relatively limited \citep{post2005computational,wilson2006where,hannay2009scientists,nguyen2010survey,clune2011software,howison2011,prabhu2011survey,kanewala2014testing,heaton2015claims}. \citet{hatton1997t} evaluated the performance of a collection of seismic data processing programs, and found that the results varied even among programs claimed to use the same algorithm. Seeing little evidence of progress ten years later, \citet{hatton2007chimera} wondered whether the scientific community must ``continue building scientific castles on software sands when we could do so much better?''
+Experimental science absolutely depends on having high-quality laboratory infrastructure, and operating it with careful, systematic protocols. In this respect, computational science differs only in the invisibility of its infrastructure. Experimental research methods, with their emphasis on transparency and replicability, pre-date computational science by over 200 years \citep{wilson2006s,fomel2009reproducible}, and so it comes as no surprise that computational science has experienced growing pains. Errors in software have can have serious consequences for research. Software faults led to the failure of the Mars Climate Orbiter mission in 19XX, and of the Arianne rocket XXX. In 2006??, discovery of a bug in image-processing software led to the retraction of YY papers in computational biochemistry (do I have that right?) \citep{miller2006scientist}. High-profile cases like these have sparked concern about the quality and reliability of research software. Studies of scientific software development practices some support for these concerns, suggesting that the practice of formal testing of code correctness remains relatively limited \citep{post2005computational,wilson2006s,hannay2009scientists,nguyen2010survey,clune2011software,howison2011scientific,prabhu2011survey,kanewala2014testing,heaton2015claims}. \citet{hatton1997t} evaluated the performance of a collection of seismic data processing programs, and found that the results varied even among programs claimed to use the same algorithm. Seeing little evidence of progress ten years later, \citet{hatton2007chimera} wondered whether the scientific community must ``continue building scientific castles on software sands when we could do so much better?''
 
 Serious flaws in scientific software are not inevitable. \citet{pipitone2012assessing} found, for example, that climate models, which are subject to rigorous testing and quality controls, have very low defect density as compared with commercial software. Their findings show that software quality control practices can work well when applied to research products. So why are such practices not used more widely? One common obstacle is simply a lack of awareness of, and training in, effective quality-control practices such as unit testing and continuous integration \citep{wilson2006where,faulk2009scientific,hannay2009scientists,kanewala2014testing}, a finding that led \citet{faulk2009scientific} to remark that `scientists are trained to manage threats to validity in experimental design but not in their codes.'
 
@@ -67,6 +78,7 @@ The recent emergence of software journals now provides a means to reward researc
 Better incentives and support for writing, documenting, and publishing research software can help address the productivity problem because they encourage software reuse over reinvention. Community software libraries and modular frameworks provide another avenue for reuse. Libraries are already widely available for general tasks such as numerical computing, parallel programming, and general science and engineering operations; some examples include PETSc \citep{abhyankar2018petsc}, Deal.II \citep{bangerth2007deal}, and the SciPy family \citep{2020SciPy-NMeth}. ``Librarization'' of software makes it easier to share, reuse, and maintain \citep{brown2015run}. In a similar vein, frameworks---defined as a collection of interoperable modules together with an environment for running and combining them---provide a way to create coupled numerical models, and more generally to simplify computational workflows \citep[e.g.,]{leavesley1996,voinov2004,peckham2013}. Frameworks, as well as some open-source libraries, take advantage of contributions from many different community members: the software becomes a resource created by and for a scientific community. Growth of a community framework does happen by accident, however. Case studies of community frameworks, libraries, and other software packages reveal that success requires two elements: a thoughtful, deliberate approach to community engagement \citep{bangerth2013,turk2013,lawrence2015science}, and carefully designed standards and protocols \citep{peckham2013,harpham2019openmi}.
 
 \section{A Community-Based Modeling System for Earth-Surface Processes}
+\label{sec:csdms}
 
 The opportunities and growing pains that face scientific computing generally also apply in particular to the sciences that deal with the earth's surface. The CSDMS Integration Facility was launched in 2007 with a mission to accelerate the pace of discovery and applications in earth-surface processes research. The centerpiece was envisioned as `a modeling environment containing a community-built, freely available suite of integrated, ever-improving software modules aimed at predicting the erosion, transport, and accumulation of sediment and solutes in landscapes and sedimentary basins over a broad range of time and space scales' \citep{syvitski2004}. A key concept is that a modular, community-built modeling system not only opens up all kinds of possibilities for using coupled models to explore the interactions among processes that were once considered in isolation (such as vegetation dynamics and landscape evolution), but also increases productivity generally by lowering or removing altogether the kinds of barriers described earlier. Achieving this requires a combination of:
 \begin{itemize}
@@ -81,6 +93,7 @@ In this contribution, we describe the software technology elements of CSDMS, and
 
 
 \section{A Taxonomy of Model Operation}
+\label{sec:taxonomy}
 
 Our practical interest here is in the tasks that computational modeling often requires, and how those tasks might be made more efficient. To that end, it is useful to define a taxonomy of model-operation tasks. Here we identify six distinct types of model-related activity, each of which has a unique set of challenges and potential bottlenecks. These six activities are arranged in order of complexity: in general, each level involves some elements of work in the levels below, plus some additional needs. The six modeling modes are summarized in Table~\ref{tab:taxonomy}.
 
@@ -156,6 +169,7 @@ some key points here:
 - FAIR modeling software requires both Findability and Accessibility; repo provides both (i.e., not just a github repo, but metadata is very important)
 
 \section{The CSDMS Workbench}
+\label{sec:workbench}
 
 \subsection{The Basic Model Interface (BMI) Standard}
 
@@ -208,7 +222,7 @@ some key points here:
 
 - do we want to include this?
 
-\section{Practices and community education}
+\section{Software Development Practices}
 
 - VC
 
@@ -216,7 +230,15 @@ some key points here:
 
 - collaboration: issues and PRs
 
+
+\section{Community Engagement}
+\label{sec:community}
+
+
 \section{Discussion}
+\label{sec:discussion}
+
+(MAYBE THIS SHOULD INCLUDES NEEDS AND OPPY'S)
 
 \section{Needs and Opportunities}
 
@@ -397,8 +419,8 @@ TODO: outline still doesn't quite feel right; try tweaking; try listing potentia
 
 
 
-\bibliography{/Users/gtucker/Documents/Literature/gt_library}
-\bibliographystyle{/Users/gtucker/Documents/Literature/agu08}
+\bibliography{gt_library}
+\bibliographystyle{agu08}
 
 
 
@@ -824,7 +846,7 @@ Find out how sci's dev and use sw. 1,972 surveys returned, 40 countries (mostly 
 
 
 %%%
-M�ller, J.P., 2009. Towards a formal semantics of event-based multi-agent simula- tions. In: Nuno, D., Sichman, J.S. (Eds.), Multi-agent Based Simulation IX. LNAI
+M\"uller, J.P., 2009. Towards a formal semantics of event-based multi-agent simula- tions. In: Nuno, D., Sichman, J.S. (Eds.), Multi-agent Based Simulation IX. LNAI
 5269. Springer Verlag, pp. 110e126.
 
 @inproceedings{muller2008towards,
