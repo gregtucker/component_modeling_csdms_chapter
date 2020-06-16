@@ -6,6 +6,7 @@
 \usepackage{natbib}
 \usepackage{array}
 \usepackage{url}
+\usepackage{graphicx}
 % \geometry{landscape} % rotated page geometry
 
 % See the ``Article customise'' template for come common customisations
@@ -20,7 +21,7 @@
 \maketitle
 
 [COULD USE A BETTER TITLE...]
-
+[Alternative title 1: CSDMS: a community effort to numerically model the dynamics of the earth’s surface.]
 [NOTE: LET'S CHALLENGE OURSELVES TO USE ACTIVE VOICE. SQUASH `TO BE' EVERYWHERE WE CAN!]
 
 [ALSO: NOTHING WRONG WITH BRINGING A SENSE OF HUMOR TO SCIENCE WRITING]
@@ -34,7 +35,7 @@
 
 Computational models play a vital role in the earth and environmental sciences. They embody theory in a quantitative and algorithmic form. By performing calculations at blinding speed, numerical models also extend our cognitive abilities, helping us explore and visualize the consequences of hypotheses. They allow us to apply existing theory to new situations. And, where the processes are sufficiently well understood, models can provide valuable forecasts of the potential trajectories of natural and anthropogenically perturbed earth systems.
 
-Computational modeling comes with a cost, however. Creating, modifying, applying, and maintaining the software costs time and money. The effort spent developing, testing, and debugging software means less effort devoted to other aspects of research and practice. In addition, scientific results that rely on software are only as robust and reproducible as the software itself. Furthermore, scientific software demands quality control: errors in scientific software not only impede research, but also---especially in an applied context---produce misleading results that lead to more serious consequences. Finally, the fact that modeling is both useful and technically challenging can give rise to a pernitious temptation: to use the wrong model for the job simply because the code that implements it is more accessible than any better alternatives. 
+Computational modeling comes with a cost, however. Creating, modifying, applying, and maintaining the software which implements numerical models costs time and money. The effort spent developing, testing, and debugging software means less effort devoted to other aspects of research and practice. In addition, scientific results that rely on software are only as robust and reproducible as the software itself. Furthermore, scientific software demands quality control: errors in scientific software not only impede research, but also---especially in an applied context---produce misleading results that lead to more serious consequences. Finally, the fact that modeling is both useful and technically challenging can give rise to a pernitious temptation: to use the wrong model for the job simply because the code that implements it is more accessible than any better alternatives. 
 
 The promise and challenges associated with environmental modeling highlight the need for a community software infrastructure that maximizes flexibility, creativity, and reliability while minimizing technical overhead. To use an artistic analogy: an ideal modeling infrastructure should provide the geo-artist with a wide palette of colors, while making it easy to mix new ones, so that more time can be devoted to creating, and less time to fussing with materials; at the same time, those materials have to be robust enough that the colors and textures will not degrade over time.
 
@@ -59,13 +60,13 @@ With the rapid growth in computing and digital infrastructure, many scientists n
 
 \subsection{Growing pains}
 
-Experimental science absolutely depends on having high-quality laboratory infrastructure, and operating it with careful, systematic protocols. In this respect, computational science differs only in the invisibility of its infrastructure. Experimental research methods, with their emphasis on transparency and replicability, pre-date computational science by over 200 years \citep{wilson2006s,fomel2009reproducible}, and so it comes as no surprise that computational science has experienced growing pains. Errors in software have can have serious consequences for research. Software faults led to the failure of the Mars Climate Orbiter mission in 19XX, and of the Arianne rocket XXX. In 2006??, discovery of a bug in image-processing software led to the retraction of YY papers in computational biochemistry (do I have that right?) \citep{miller2006scientist}. High-profile cases like these have sparked concern about the quality and reliability of research software. Studies of scientific software development practices some support for these concerns, suggesting that the practice of formal testing of code correctness remains relatively limited \citep{post2005computational,wilson2006s,hannay2009scientists,nguyen2010survey,clune2011software,howison2011scientific,prabhu2011survey,kanewala2014testing,heaton2015claims}. \citet{hatton1997t} evaluated the performance of a collection of seismic data processing programs, and found that the results varied even among programs claimed to use the same algorithm. Seeing little evidence of progress ten years later, \citet{hatton2007chimera} wondered whether the scientific community must ``continue building scientific castles on software sands when we could do so much better?''
+Experimental science absolutely depends on having high-quality laboratory infrastructure, and operating it with careful, systematic protocols. In this respect, computational science differs only in the invisibility of its infrastructure. Experimental research methods, with their emphasis on transparency and replicability, pre-date computational science by over 200 years \citep{wilson2006s,fomel2009reproducible}, and so it comes as no surprise that computational science has experienced growing pains. Errors in software can have serious consequences for research. Software faults led to the failure of the Mars Climate Orbiter mission in 19XX, and of the Arianne rocket XXX. In 2006??, discovery of a bug in image-processing software led to the retraction of YY papers in computational biochemistry (do I have that right?) \citep{miller2006scientist}. High-profile cases like these have sparked concern about the quality and reliability of research software. Studies of scientific software development practices some support for these concerns, suggesting that the practice of formal testing of code correctness remains relatively limited \citep{post2005computational,wilson2006s,hannay2009scientists,nguyen2010survey,clune2011software,howison2011scientific,prabhu2011survey,kanewala2014testing,heaton2015claims}. \citet{hatton1997t} evaluated the performance of a collection of seismic data processing programs, and found that the results varied even among programs claimed to use the same algorithm. Seeing little evidence of progress ten years later, \citet{hatton2007chimera} wondered whether the scientific community must ``continue building scientific castles on software sands when we could do so much better?''
 
 Serious flaws in scientific software are not inevitable. \citet{pipitone2012assessing} found, for example, that climate models, which are subject to rigorous testing and quality controls, have very low defect density as compared with commercial software. Their findings show that software quality control practices can work well when applied to research products. So why are such practices not used more widely? One common obstacle is simply a lack of awareness of, and training in, effective quality-control practices such as unit testing and continuous integration \citep{wilson2006s,faulk2009scientific,hannay2009scientists,kanewala2014testing}, a finding that led \citet{faulk2009scientific} to remark that `scientists are trained to manage threats to validity in experimental design but not in their codes.'
 
 A related challenge lies in computational reproducibility: the ability to recreate the results of a study using the same data and software. The ability to reproduce others' findings forms a cornerstone of the scientific method. Yet as computational science has bloomed, concern has grown over the difficulty or impossibility of reproducing most published results \citep[e.g.,][]{schwab2000making,peng2011reproducible,stodden2013setting,barba2016hard,alnoamany2018towards,chen2019open,krafczyk2019scientific}. In the words of \citet{leveque2009python}, `scientific and mathematical journals are filled with pretty pictures of computational experiments that the reader has no hope of repeating.' In a reproducibility study of 306 articles in the Journal of Computational Physics, \citet{stodden2018enabling} found only six that provided enough information about their computational artifacts to obtain them and re-run the analysis without contacting the original authors. Of the remaining papers, about half were impossible to reproduce even after contacting the authors for assistance. Reproducibility has several dimensions: sharing (the digital artifacts need to be available), discoverability (one needs to be able to find them), learnability (sufficient documentation), and operability (here standards help). Failure in any or all of these dimensions ultimately hurts productivity, because researchers end up spending more time either figuring out opaque, poorly documented software, or reinventing their own version from scratch. Collectively, these reports of unreproducible results and unsustainable, under-tested software suggest that much of computational science relies on a brittle cyberinfrastructure, and productivity suffers as a result \citep{wilson2006s,faulk2009scientific,prabhu2011survey}.
 
-A variety of factors contribute to the challenges of research software quality, reproducibility, and reusability. Most scientists lack formal training in software development, and tend not to know about tools and practices that could increase their productivity \citep{kelly2007software,basili2008understanding,faulk2009scientific,hannay2009scientists,hwang2017software,alnoamany2018towards,pinto2018scientists,kellogg2018role}. Perceived incentives also play a role: the academic credit system rewards publication of results rather than production of high-quality, reusable software (though credit mechanisms for software are now starting to emerge) \citep{leveque2009python,howison2011scientific,morin2012shining,turk2013scaling,ahalt2014water,poisot2015best,hwang2017software,wiese2019naming}. The combination of incentive structure and lack of training in best practices can lead to inflexible, hard-to-maintain software \citep{brown2014run,johanson2018software}. Often enough it ends up as ``abandonware'' when a project ends \citep{barnes2010publish}. A certain embarrassment factor may contribute as well: in our own experience, as well as reports from other fields, researchers often express reluctance to share ``messy'' code, even when they have used the software as the basis for published research \citep{barnes2010publish,morin2012shining,leveque2013top}.
+A variety of factors contribute to the challenges of research software quality, reproducibility, and reusability. Most scientists lack formal training in software development, and tend not to know about tools and practices that could increase their productivity \citep{kelly2007software,basili2008understanding,faulk2009scientific,hannay2009scientists,hwang2017software,alnoamany2018towards,pinto2018scientists,kellogg2018role}. Perceived incentives also play a role: the academic credit system rewards publication of new results rather than production of high-quality, reusable software (though credit mechanisms for software are now starting to emerge) \citep{leveque2009python,howison2011scientific,morin2012shining,turk2013scaling,ahalt2014water,poisot2015best,hwang2017software,wiese2019naming}. The combination of incentive structure and lack of training in best practices can lead to inflexible, hard-to-maintain software \citep{brown2014run,johanson2018software}. Often enough it ends up as ``abandonware'' when a project ends \citep{barnes2010publish}. A certain embarrassment factor may contribute as well: in our own experience, as well as reports from other fields, researchers often express reluctance to share ``messy'' code, even when they have used the software as the basis for published research \citep{barnes2010publish,morin2012shining,leveque2013top}.
 
 
 
@@ -162,20 +163,21 @@ Many of the exciting research frontiers in earth and environmental science lie a
 
 \section{The CSDMS Model Repository: A Platform for Sharing and Archiving Software Resources}
 
-some key points here:
+Not all that long-ago making model source code free available was more the exception than common practice. The fear that others would take advantage of years of coding, find bugs, or the shame of exposing poor coding practices made developers hesitant in openly sharing code. Additionally, model developers saw their models as trade secrets. If others wanted to use a model for their research, the developer needed to be contacted, whom by not sharing openly, could negotiate to become more involved in the research. Furthermore, less easily accessible tools and platforms were available to promote sharing. For example, version control of model source code was something that had to be set up on a server. There were no wide available services like GitHub (established 2008) or SourceForge (established 1999), to enable working with a team on model development, enabling openly sharing models without having to invest in hard or software.
 
-- describe the repo (and maybe a bit of history: from `models as trade secrets' to increasingly widespread sharing via repo)
+However, science would benefit from openly shared source code. For one, sharing reduces duplication. After all, there is less need to write a model from scratch, once (part of) a model has proven to capture a certain process well and timely. Therefore, sharing of source code accelerates science, as others are on a faster trajectory to learn from and build upon previous model development efforts. Sharing of source code also makes science more robust and trusted. By sharing, others have the possibility to replicate science, but sharing also hardens the code as people can report bugs and bug fixes. It is therefore encouraging to see a modeling culture shift over the last 2 decades, similar to what can be observed for data. For good data management, there are now the FAIR principals —Findability, Accessibility, Interoperability, and Reusability — that have been formulated as guideline to data producers and publishers \cite{wilkinson2016fair}. According to the FAIR principles, each dataset should have a unique digital object identifier (DOI) to get to the data, associated with searchable metadata. By including a formal, broadly applicable representation language and utilize open and widely accepted domain-relevant vocabularies and ontologies, data becomes more interoperable. And by providing an abundance of documents that describes datasets and how they can be used, so including license information, data becomes more reusable.
 
-- FAIR modeling software requires both Findability and Accessibility; repo provides both (i.e., not just a github repo, but metadata is very important)
+For model source code, version control platforms have been developed, and are now widely used for sharing and participating in coding. But as the data-FAIR principals indicate, sharing source code by itself is not enough. Therefore, CSDMS implemented the FAIR principals in setting up a model repository for earth surface dynamics. A minimal set of metadata parameters is defined to: describe a model, provide contact information of the model development team, indicate technical details like operating platform and the software license, a description of the model input and output, what processes and key physical parameters are incorporated, and which model limitations can be expected. This minimal set of metadata includes a link to the actual source code, that needs to be either made available 24/7 through a personal web repository or through the CSDMS community repository. All model metadata, stored through the CSDMS website, as well as the actual source code when stored in the CSDMS code repository on GitHub are accessible for machines through web APIs, as emphasized by the FAIR protocols to automatically find and use the data, in addition to supporting access by individuals. DOIs for stable versions of the model source code are generated on request and included with the metadata. Model metadata is enriched by including additional model information like a comprehensive bibliography of a model. Following this practice, the CSDMS model repository holds over 370 open source models of the community (as of June 2020). 
+
 
 \section{The CSDMS Workbench}
 \label{sec:workbench}
 
 \subsection{The Basic Model Interface (BMI) Standard}
 
-- standardization: BMI
 
-(note: this isn't meant to be a substitute for the BMI papers; it's just a relatively short summary, probably with a table or figure, plus a figure illustrating an application in the literature or underway, e.g., Hoch et al. (2017) and/or PRMS)
+%- standardization: BMI
+%(note: this isn't meant to be a substitute for the BMI papers; it's just a relatively short summary, probably with a table or figure, plus a figure illustrating an application in the literature or underway, e.g., Hoch et al. (2017) and/or PRMS)
 
 \subsection{Language Interoperability: The Babelizer}
 
@@ -209,7 +211,55 @@ some key points here:
 
 - examples: NWM, NHM, another one or two? (with picture, maybe a screen shot of a notebook that reads data and plots an image)
 
+
+The data components are designed to provide a consistent way to access various types of datasets (e.g., time series, raster grid, and multidimensional space-time data) and subsets of them without needing to know the original file formats . Each data component is a dataset wrapped with BMI and can easily interact with a numerical model that is wrapped in the pymt modeling framework. 
+
+One of the example is the National Water Model (NWM) data component. This data component can access and subset the forecasted streamflow time series generated by the NWM hydrologic modelling framework. Figure \label{fig:data_component1} shows how to use the data component to get the streamflow data at a river channel for a flooding event. Figure \label{fig:data_component2} shows the corresponding time series plot. This data component includes a set of standard control and query functions (e.g.,  initialize() , update()). These standard methods make the dataset easier to couple with numerical models that are implemented with BMI without needing to know the time series file format.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.9]{Figures/data_component1.png}
+\caption{Screenshot of a JupyterNotebook demonstrating how to use nwm data component to access and subset streamflow dataset. }
+\label{fig:data_component1}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{Figures/data_component2.png}
+\caption{Time series plot for the accessed streamflow dataset. }
+\label{fig:data_component2}
+\end{figure}
+
+
 \subsection{Creating new models: Landlab}
+
+Landlab is a Python-language library designed to support the creation, combination, and re-use of 2-D models \cite{hobley2017creative, barnhart2020short}. 
+
+A implementing has two core parts:
+- the computational domain, the \textit{grid}. 
+- one or more things that operate on the computational domain, each \textit{components}. 
+If one has more than one component, one might want for them to be able to talk to one another. 
+
+The former doesn't need to be different across applications. 
+
+The design of Landlab provides three capabilities to support efficient creation of new models. 
+
+First, the Landlab \textit{grid} is a data structure that represents the computational domain. Landlab provides multiple grid types through a similar interface (e.g., regular raster, network, regular hexagon, irregular). Each grid type provides a full set of adjacency information for the points, lines, and polygons that make up the computational mesh. Second, variables can be stored at any of the elements of the grid. These \textit{fields} provide a place to store model state variables. Third, Landlab provides a base class for a model \textit{component}, which enforces a standard. 
+
+
+% What are the building blocks one might want to reduce friction in creating a new model. 
+% - Grid (multiple types of grids, same interface)
+% - Ability to store state variables. 
+% - Template (python base class) for a process component. 
+% Built in metadata about what state variables it needs (inputs) and modifies (outputs).
+
+In addition we have a variety of plotting and misc numerical/gis-ish utilties. 
+
+Testing, examples, and API documentation. 
+
+B/c of grid+component metadata, almost all components are prepared to be pyMT components. If a component author provides the minimum metadata (which is required by the component base class), an init, and a r1s, then it is almost certainly pymt compatible. 
+
+Using Landlab models... within pymt, write your own script, use something like  terrainbento\cite{barnhart2019terrainbento}.
 
 - relatively brief summary, pointing toward Hobley and Barnhart papers
 
@@ -228,15 +278,22 @@ some key points here:
 
 - testing and CI
 
+- creating the documentation (and how much is enough?)
+   - API documentation vs examples (typically notebooks)
+
 - collaboration: issues and PRs
 
 
 \section{Community Engagement}
 \label{sec:community}
 
-One of CSDMS' major activities has been the creation of a thriving community around earth-surface dynamics modeling [1]. As of 2020, over 1,900 members representing 552 institutions (144 US academic) and 71 countries, had joined the community.  CSDMS is, by design, a broad and deep coalition of members from disciplines reflected by the five Working Groups and seven Focus Research Groups (Figure~\ref{}).  From its inception, CSDMS has encouraged trans-disciplinarity by providing opportunities such as annual meetings, workshops, hackathons, and training events for domain scientists to interact with colleagues from other earth and social science disciplines.  These connections are essential for knowledge exchange among community efforts and allow for wider penetration of new technology and ideas. Cross-pollination of ideas from these events and other community-member interactions have lead to a variety of independently-funded research projects. CSDMS has played a key role in shifting the paradigm for open code sharing in the earth surface processes by facilitating resource sharing through model, data and education repositories on the CSDMS web portal.  CSDMS also offers a variety of services to community members including proposal support, Research Software Engineering as a Service and a Help Desk.  Regular communication with members is key to maintain community engagement and is accomplished through newsletters, direct email communications and increasingly social media.  A small Integration Facility located at the University of Colorado, Boulder coordinates the community.
+One of CSDMS' major activities has been the creation of a thriving community around earth-surface dynamics modeling \citep{overeem2013strategies}. As of 2020, over 1,900 members representing 552 institutions (144 US academic) and 71 countries, had joined the community.  CSDMS is, by design, a broad and deep coalition of members from disciplines reflected by the five Working Groups and seven Focus Research Groups (Figure~\ref{}).  From its inception, CSDMS has encouraged trans-disciplinarity by providing opportunities such as annual meetings, workshops, hackathons, and training events for domain scientists to interact with colleagues from other earth and social science disciplines.  These connections are essential for knowledge exchange among community efforts and allow for wider penetration of new technology and ideas. Cross-pollination of ideas from these events and other community-member interactions have lead to a variety of independently-funded research projects. CSDMS has played a key role in shifting the paradigm for open code sharing in the earth surface processes by facilitating resource sharing through model, data and education repositories on the CSDMS web portal.  CSDMS also offers a variety of services to community members including proposal support, Research Software Engineering as a Service and a Help Desk.  Regular communication with members is key to maintain community engagement and is accomplished through newsletters, direct email communications and increasingly social media.  A small Integration Facility located at the University of Colorado, Boulder coordinates the community.
 
+\section{Training the next generation of geo modelers}
 
+To do state-of-art earth surface process research, scientists need a skill set first and foremost in Earth surface processes and the geoscience subdiscipline of interest.  But along with their disciplinary expertise, however, they also need a strong foundation in programming, advanced computing skills and data analytics skills [National Science Foundation Advisory Committee for Cyberinfrastructure, 2011].
+Traditional Earth science education does not usually equip students with skills to use modern cyberinfrastructure and computing resources efficiently, or to become model developers [Campbell et al., 2013]. The Earth Surface Processes (ESP) community critically needs a platform to teach modern programming practices and high performance computing methods to develop innovative models that can be used to understand and predict how the earth’s surface responds to environmental change and human influence.
+The practice of modeling lies at the core of predictive ESP sciences and educators should engage students in building, testing, and applying models [Hestens, 1996; Manduca et al., 2008], but we found from a review of course catalogs that in practice the undergraduate curricula of more traditional disciplinary focused departments do not include this component [Campbell et al., 2013]. This issue is not entirely unique to ESP sciences. The geosciences today are intensively quantitative, and there is an urgent need for a workforce with strong STEM skills [National Research Council, 2012]. NSF recognizes as one of its 10 Big Ideas [National Science Foundation, 2016] that pathways are needed for educators to create a 21st-century workforce capable of effectively dealing with data [ED Ofﬁce of Educational Technology, 2017]. Moreover, an agile STEM workforce is considered a national priority [National Science Foundation Advisory Committee for Cyberinfrastructure, 2011]. Realizing this, CSDMS provides hands-on training opportunities during meetings. Some efforts are meant to built foundation - teach graduate students skills in best programming practices and version controls in day-long short courses. Other outreach consist of short clinics, targeted to give potential users of cyberinfrastructure an active feel for certain models or modeling techniques, or to provide an update to experts on new developments.  More extensive separately organized hackathons bring together small science teams to work on solutions for more specific outstanding research problems.  For the first time in 2020, an immersive Earth Surface Processes Summer Institute is being organized online for a large group of students and early career scientists, focused solely on capacity building for East Surface Processes modeling.
 
 \section{Discussion}
 \label{sec:discussion}
@@ -419,7 +476,9 @@ From here: see if there's a way to distill this into a coherent outline/story. A
 From here, take the above and wrap it in a complete outline, with intro, background, and discussion (including needs).
 
 TODO: outline still doesn't quite feel right; try tweaking; try listing potential figures
+\section{Acknowledgements}
 
+NSF-EAR 1725774 to Barnhart.
 
 
 \bibliography{gt_library}
