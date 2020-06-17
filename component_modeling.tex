@@ -1,4 +1,3 @@
-
 \documentclass[12pt]{amsart}
 \usepackage{geometry} % see geometry.pdf on how to lay out the page. There's lots.
 \usepackage{booktabs}
@@ -7,6 +6,10 @@
 \usepackage{array}
 \usepackage{url}
 \usepackage{graphicx}
+\usepackage{todonotes}
+\usepackage{listings} % make code listings -MP
+\usepackage{minted}   % pretty print code -MP
+
 % \geometry{landscape} % rotated page geometry
 
 % See the ``Article customise'' template for come common customisations
@@ -60,7 +63,7 @@ With the rapid growth in computing and digital infrastructure, many scientists n
 
 \subsection{Growing pains}
 
-Experimental science absolutely depends on having high-quality laboratory infrastructure, and operating it with careful, systematic protocols. In this respect, computational science differs only in the invisibility of its infrastructure. Experimental research methods, with their emphasis on transparency and replicability, pre-date computational science by over 200 years \citep{wilson2006s,fomel2009reproducible}, and so it comes as no surprise that computational science has experienced growing pains. Errors in software can have serious consequences for research. Software faults led to the failure of the Mars Climate Orbiter mission in 19XX, and of the Arianne rocket XXX. In 2006??, discovery of a bug in image-processing software led to the retraction of YY papers in computational biochemistry (do I have that right?) \citep{miller2006scientist}. High-profile cases like these have sparked concern about the quality and reliability of research software. Studies of scientific software development practices some support for these concerns, suggesting that the practice of formal testing of code correctness remains relatively limited \citep{post2005computational,wilson2006s,hannay2009scientists,nguyen2010survey,clune2011software,howison2011scientific,prabhu2011survey,kanewala2014testing,heaton2015claims}. \citet{hatton1997t} evaluated the performance of a collection of seismic data processing programs, and found that the results varied even among programs claimed to use the same algorithm. Seeing little evidence of progress ten years later, \citet{hatton2007chimera} wondered whether the scientific community must ``continue building scientific castles on software sands when we could do so much better?''
+Experimental science absolutely depends on having high-quality laboratory infrastructure, and operating it with careful, systematic protocols. In this respect, computational science differs only in the invisibility of its infrastructure. Experimental research methods, with their emphasis on transparency and replicability, pre-date computational science by over 200 years \citep{wilson2006s,fomel2009reproducible}, and so it comes as no surprise that computational science has experienced growing pains. Errors in software can have serious consequences for research. Software faults led to the failure of the Mars Climate Orbiter mission in 1999, and of the Arianne rocket in 1996. In 2006??, discovery of a bug in image-processing software led to the retraction of 5 papers in computational biochemistry (do I have that right?) \citep{miller2006scientist}. High-profile cases like these have sparked concern about the quality and reliability of research software. Studies of scientific software development practices some support for these concerns, suggesting that the practice of formal testing of code correctness remains relatively limited \citep{post2005computational,wilson2006s,hannay2009scientists,nguyen2010survey,clune2011software,howison2011scientific,prabhu2011survey,kanewala2014testing,heaton2015claims}. \citet{hatton1997t} evaluated the performance of a collection of seismic data processing programs, and found that the results varied even among programs claimed to use the same algorithm. Seeing little evidence of progress ten years later, \citet{hatton2007chimera} wondered whether the scientific community must ``continue building scientific castles on software sands when we could do so much better?''
 
 Serious flaws in scientific software are not inevitable. \citet{pipitone2012assessing} found, for example, that climate models, which are subject to rigorous testing and quality controls, have very low defect density as compared with commercial software. Their findings show that software quality control practices can work well when applied to research products. So why are such practices not used more widely? One common obstacle is simply a lack of awareness of, and training in, effective quality-control practices such as unit testing and continuous integration \citep{wilson2006s,faulk2009scientific,hannay2009scientists,kanewala2014testing}, a finding that led \citet{faulk2009scientific} to remark that `scientists are trained to manage threats to validity in experimental design but not in their codes.'
 
@@ -154,8 +157,8 @@ When an model provides most but not all of the functionality needed for a partic
 
 Many of the exciting research frontiers in earth and environmental science lie at the seams between systems. Some examples include: rivers and coasts \citep[e.g.,][]{ratliff2018exploring}; tectonics and earth-surface processes \citep[e.g.,][]{roy2016dynamic}; ecosystems, soils, and landscape evolution \citep[e.g.,][]{istanbulluoglu2005vegetation,pelletier2017way,lyons2020speciesevolver}; and human actions and biophysical systems \citep[e.g.,][]{robinson2018modelling}. For these sorts of problem, coupled numerical modeling provides a great way to develop insight and to test hypotheses by comparing models with observations. The complexity of the task of coupling two numerical models depends on the nature of coupling (for example, sequential execution versus coupling via joint matrix inversion) and on the program structure of each. The task becomes much simpler when both models offer a public, standardized interface: a set of callable functions that allow the appropriate exchange of data and mutual execution of algorithms.
 
-\subsection{Building}
-
+\subsection{Building}\label{sec:build}
+\todo[inline,color=yellow]{KRB: the section on landlab refers to this section below, so at some point it would be good to make sure its fully written state is not incompatible with that section}
 ...one faces all sorts of issues: how do you set params? how to you read input data? how write output? how set up a grid? is there a way to incorporate elements from earlier work? (figure from LL 1) many of these tasks have been implemented repeatedly by scientists across the globe, and often in an ad hoc, idiosyncratic way. task of model building much easier if there are libraries that offer common operations, and a way to re-use functionality.
 
 ...maybe make the foregoing an itemized list, then return from there to have text that says hey we're going to describe a collection of resources, tools, and standards that make all of the above tasks more efficient.
@@ -175,9 +178,151 @@ For model source code, version control platforms have been developed, and are no
 
 \subsection{The Basic Model Interface (BMI) Standard}
 
-
 %- standardization: BMI
+
 %(note: this isn't meant to be a substitute for the BMI papers; it's just a relatively short summary, probably with a table or figure, plus a figure illustrating an application in the literature or underway, e.g., Hoch et al. (2017) and/or PRMS)
+
+% Outline
+% 1. Intro to idea of BMI (use Greg's intro to BMI docs
+% 2. Description of BMI methods
+%   a. Include table
+% 3. Example of BMI use w/ figure (I like Greg's suggestion of Hoch paper.
+
+When you climb in the driver's seat of an unfamiliar car,
+you are presented with a familiar sight:
+whatever the make or model,
+we take it for granted that the car provides
+a steering wheel, brake pedal, and speedometer,
+along with other controls and readouts
+that are common to essentially all cars on the planet.
+Although we don't usually think of it this way,
+drivers across the globe benefit
+from a standard interface---a set of control mechanisms and information displays
+that have basically the same design
+regardless of whether the car
+is a tiny electric two-seater or a giant stretch limousine.
+This standard interface makes operating a car much easier
+than if each one presented a radically different interface.
+Imagine a world where switching from a sports car to a pickup truck
+required months of study and practice!
+
+%Similarly, railroads benefit from a standard for coupling rail cars together.
+%The result: trains can be assembled from combinations of all sorts of different rail cars,
+%built by different companies, in different places, and with different purposes.
+
+We believe that numerical models should offer a similar standardization.
+To this end,
+\cite{peckham2013component} developed the Basic Model Interface (BMI).
+%a set of standard control and query functions for models.
+In software engineering,
+an interface is a named set of functions
+with prescribed arguments and return values.
+The BMI provides a standard set of functions
+for querying and controlling a model.
+When a model is equipped with a BMI,
+it becomes easier to use,
+because its control functions are now the same as every other model with a BMI.
+%once you've seen one BMI, you've seen them all.
+Further, a model with a BMI can be coupled with other models exposing a BMI.
+Table \ref{tab:bmi} lists the individual functions
+that comprise the Basic Model Interface,
+along with a brief description of each.
+The table shows the current version of BMI, version 2.0,
+which represents a collection of improvements
+to the original specification.
+\todo{Reference JOSS paper in review.}
+
+\begin{table}[htbp]
+    \topcaption{Listing and description of Basic Model Interface (BMI) functions.}
+    \begin{tabular}{ll}
+        \hline
+        Function Name &
+        Description \\
+        \hline\hline
+        
+        \verb|initialize| & Perform startup tasks for the model. \\
+        \verb|update| & Advance model state by one time step. \\
+        \verb|update_until| & Advance model state until the given time. \\
+        \verb|finalize| & Perform tear-down tasks for the model. \\
+        \verb|get_component_name| & Name of the model. \\
+        \verb|get_input_item_count| & Count of a model’s input variables. \\
+        \verb|get_output_item_count| & Count of a model’s output variables. \\
+        \verb|get_input_var_names| & List of a model’s input variables. \\
+        \verb|get_output_var_names| & List of a model’s output variables. \\
+        \verb|get_var_grid| & Get the grid identifier for a variable. \\
+        \verb|get_var_type| & Get the data type of a variable. \\
+        \verb|get_var_units| & Get the units of a variable. \\
+        \verb|get_var_itemsize| & Get the size (in bytes) of one element of a variable. \\
+        \verb|get_var_nbytes| & Get the total size (in bytes) of a variable. \\
+        \verb|get_var_location| & Get the grid element type of a variable. \\
+        \verb|get_current_time| & Current time of the model. \\
+        \verb|get_start_time| & Start time of the model. \\
+        \verb|get_end_time| & End time of the model. \\
+        \verb|get_time_units| & Time units used in the model. \\
+        \verb|get_time_step| & Time step used in the model. \\
+        \verb|get_value| & Get a copy of values of a given variable. \\
+        \verb|get_value_ptr| & Get a reference to the values of a given variable. \\
+        \verb|get_value_at_indices| & Get variable values at specific locations. \\
+        \verb|set_value| & Set the values of a given variable. \\
+        \verb|set_value_at_indices| & Set the values of a variable at specific locations. \\
+        \verb|get_grid_rank| & Get the number of dimensions of a computational grid. \\
+        \verb|get_grid_size| & Get the total number of elements of a computational grid. \\
+        \verb|get_grid_type| & Get the grid type as a string. \\
+        \verb|get_grid_shape| & Get the dimensions of a computational grid. \\
+        \verb|get_grid_spacing| & Get the spacing between grid nodes. \\
+        \verb|get_grid_origin| & Get the origin of a grid. \\
+        \verb|get_grid_x| & Get the locations of a grid’s nodes in dimension 1. \\
+        \verb|get_grid_y| & Get the locations of a grid’s nodes in dimension 2. \\
+        \verb|get_grid_z| & Get the locations of a grid’s nodes in dimension 3. \\
+        \verb|get_grid_node_count| & Get the number of nodes in the grid. \\
+        \verb|get_grid_edge_count| & Get the number of edges in the grid. \\
+        \verb|get_grid_face_count| & Get the number of faces in the grid. \\
+        \verb|get_grid_edge_nodes| & Get the edge-node connectivity. \\
+        \verb|get_grid_face_edges| & Get the face-edge connectivity. \\
+        \verb|get_grid_face_nodes| & Get the face-node connectivity. \\
+        \verb|get_grid_nodes_per_face| & Get the number of nodes for each face. \\
+        
+   \end{tabular}
+   \label{tab:bmi}
+\end{table}
+
+While a BMI can be written for any language,
+CSDMS currently supports four languages: C, C++, Fortran, and Python.
+An example of using BMI with Fortran 2003
+is shown in Listing~\ref{listing:bmi_code} below.
+
+% minted is super cool, nicer than just verbatim -MP
+\begin{listing}[ht]
+\topcaption{Example Fortran BMI code.}
+\begin{minted}{fortran}
+  type (bmi_prms_surface) :: m
+  character (len=*) :: config_file
+  integer :: s
+  double precision :: now, end_time
+
+  s = m%initialize(config_file)
+  s = m%get_current_time(now)
+  s = m%get_end_time(end_time)
+  do while (now < end_time)
+     s = m%update()
+     s = m%get_current_time(now)
+  end do
+  s = m%finalize()
+\end{minted}
+\label{listing:bmi_code}
+\end{listing}
+
+Show a code sample here.
+PRMS (describe the model), written in Fortran.
+Reference Regan paper.
+Show and explain calls to initialize, update, finalize.
+Comment how there's no need to know how PRMS works;
+you just need to use the BMI functions to drive it (ha!).
+
+An example of BMI use in current research.
+Use a Hoch paper.
+Show one of his figures.
+
 
 \subsection{Language Interoperability: The Babelizer}
 
@@ -214,7 +359,7 @@ For model source code, version control platforms have been developed, and are no
 
 The data components are designed to provide a consistent way to access various types of datasets (e.g., time series, raster grid, and multidimensional space-time data) and subsets of them without needing to know the original file formats . Each data component is a dataset wrapped with BMI and can easily interact with a numerical model that is wrapped in the pymt modeling framework. 
 
-One of the example is the National Water Model (NWM) data component. This data component can access and subset the forecasted streamflow time series generated by the NWM hydrologic modelling framework. Figure \label{fig:data_component1} shows how to use the data component to get the streamflow data at a river channel for a flooding event. Figure \label{fig:data_component2} shows the corresponding time series plot. This data component includes a set of standard control and query functions (e.g.,  initialize() , update()). These standard methods make the dataset easier to couple with numerical models that are implemented with BMI without needing to know the time series file format.
+One of the example is the National Water Model (NWM) data component. This data component can access and subset the forecasted streamflow time series generated by the NWM hydrologic modelling framework. Figure \ref{fig:data_component1} shows how to use the data component to get the streamflow data at a river channel for a flooding event. Figure \ref{fig:data_component2} shows the corresponding time series plot. This data component includes a set of standard control and query functions (e.g.,  initialize() , update()). These standard methods make the dataset easier to couple with numerical models that are implemented with BMI without needing to know the time series file format.
 
 \begin{figure}[h!]
 \centering
@@ -233,39 +378,23 @@ One of the example is the National Water Model (NWM) data component. This data c
 
 \subsection{Creating new models: Landlab}
 
-Landlab is a Python-language library designed to support the creation, combination, and re-use of 2-D models \cite{hobley2017creative, barnhart2020short}. 
+Landlab is a Python-language library designed to support the creation, combination, and re-use of 2-D models \citep{hobley2017creative, barnhart2020short}. For the moment, lets presume that a model developer has identified input and output parameters, model state variables, and the governing equations and/or model rules. We might then synthesize the tasks of building the model (Section~\ref{sec:build}) into two types: (a) creating required data structures and (b) implementing governing equations that act on those data structures. For example, most models need to represent the computational domain, the ability to store information across the domain; and adjacency information describing how the different parts of the domain are connected to one another. This division is clearly simplistic, and neglects many intricacies; yet it captures the fundamental activities of model building. 
 
-A implementing has two core parts:
-- the computational domain, the \textit{grid}. 
-- one or more things that operate on the computational domain, each \textit{components}. 
-If one has more than one component, one might want for them to be able to talk to one another. 
+Landlab provides re-usable software infrastructure that addresses the most common needs for our two model building tasks. It provides a \textit{grid} object to represent the computational domain and store \textit{fields} of state variables. Landlab provides multiple grid types through a similar interface (e.g., regular raster, network, regular hexagon, irregular). For all grid types, the adjacency information and access to fields follows the same interface---making it nearly trivial for a model to work on multiple grid types. 
 
-The former doesn't need to be different across applications. 
+To address the second model building task, Landlab provides two capabilities. First is a set of numerical utilities that support common needs. For example, the ability to calculate differences, fluxes, and divergences of values stored at fields. Second is a \textit{Component} base class. Components within Landlab each simulate a single process (e.g., stream power erosion, linear diffusion). The Component base class enforces a minimum amount of model metadata for each model and defines common attributes. If a model, or part of model is implemented within Landlab as a Component, the model author must only write the code to instantiate a model, and to run it forward in time. 
 
-The design of Landlab provides three capabilities to support efficient creation of new models. 
+The Component base class was designed to expose a BMI such that conversion of Landlab Components to pymt components is trivial. 
+\todo[inline,color=yellow]{KRB: I think it would be best if Eric finished this section}
 
-First, the Landlab \textit{grid} is a data structure that represents the computational domain. Landlab provides multiple grid types through a similar interface (e.g., regular raster, network, regular hexagon, irregular). Each grid type provides a full set of adjacency information for the points, lines, and polygons that make up the computational mesh. Second, variables can be stored at any of the elements of the grid. These \textit{fields} provide a place to store model state variables. Third, Landlab provides a base class for a model \textit{component}, which enforces a standard. 
+The design of Landlab supports a variety of usage styles. Interested users and/or developers may use Landlab to create models as Components, as scripts which combine components, or may packages such as \texttt{terrainbento} \citep{barnhart2019terrainbento} which combine Landlab Components into a predefined set of models.
 
+% GREGS NOTES:
+% - relatively brief summary, pointing toward Hobley and Barnhart papers
 
-% What are the building blocks one might want to reduce friction in creating a new model. 
-% - Grid (multiple types of grids, same interface)
-% - Ability to store state variables. 
-% - Template (python base class) for a process component. 
-% Built in metadata about what state variables it needs (inputs) and modifies (outputs).
+% - include LL components as lighter-weight version of BMI components (because it's explicitly Python based, so don't need the extra overhead of BMI)
 
-In addition we have a variety of plotting and misc numerical/gis-ish utilties. 
-
-Testing, examples, and API documentation. 
-
-B/c of grid+component metadata, almost all components are prepared to be pyMT components. If a component author provides the minimum metadata (which is required by the component base class), an init, and a r1s, then it is almost certainly pymt compatible. 
-
-Using Landlab models... within pymt, write your own script, use something like  terrainbento\cite{barnhart2019terrainbento}.
-
-- relatively brief summary, pointing toward Hobley and Barnhart papers
-
-- include LL components as lighter-weight version of BMI components (because it's explicitly Python based, so don't need the extra overhead of BMI)
-
-- include mention of how a LL component gets converted to a pymt component
+% - include mention of how a LL component gets converted to a pymt component
 
 
 \subsection{OPTIONAL: Model analysis: Dakota and Dakotathon}
@@ -287,11 +416,7 @@ Using Landlab models... within pymt, write your own script, use something like  
 \section{Community Engagement}
 \label{sec:community}
 
-One of CSDMS' major activities has been the creation of a thriving community around earth-surface dynamics modeling \citep{overeem2013strategies}. As of 2020, over 1,900 members representing 552 institutions (144 US academic) and 71 countries, had joined the community.  CSDMS is, by design, a broad and deep coalition of members from disciplines reflected by the five Working Groups and seven Focus Research Groups (Figure~\ref{}).  From its inception, CSDMS has encouraged trans-disciplinarity by providing opportunities such as annual meetings, workshops, hackathons, and training events for domain scientists to interact with colleagues from other earth and social science disciplines.  These connections are essential for knowledge exchange among community efforts and allow for wider penetration of new technology and ideas. Cross-pollination of ideas from these events and other community-member interactions have lead to a variety of independently-funded research projects. CSDMS has played a key role in shifting the paradigm for open code sharing in the earth surface processes by facilitating resource sharing through model, data and education repositories on the CSDMS web portal.  CSDMS also offers a variety of services to community members including proposal support, Research Software Engineering as a Service and a Help Desk.  Regular communication with members is key to maintain community engagement and is accomplished through newsletters, direct email communications and increasingly social media.  A small Integration Facility located at the University of Colorado, Boulder coordinates the community.
-
-\section{Training the next generation of geo modelers}
-
-To do state-of-art earth surface process research, scientists need a skill set first and foremost in Earth surface processes and the geoscience subdiscipline of interest.  But along with their disciplinary expertise, however, they also need a strong foundation in programming, advanced computing skills and data analytics skills [National Science Foundation Advisory Committee for Cyberinfrastructure, 2011].
+One of CSDMS' major activities has been the creation of a thriving community around earth-surface dynamics modeling \citep{overeem2013strategies}. As of 2020, over 1,900 members representing 552 institutions (144 US academic) and 71 countries, had joined the community.  CSDMS is, by design, a broad and deep coalition of members from disciplines reflected by the five Working Groups and seven Focus Research Groups (Figure~\ref{}).  From its inception, CSDMS has encouraged trans-disciplinarity by providing opportunities such as annual meetings, workshops, hackathons, and training events for domain scientists to interact with colleagues from other earth and social science disciplines.  These connections are essential for knowledge exchange among community efforts and allow for wider penetration of new technology and ideas. Cross-pollination of ideas from these events and other community-member interactions have lead to a variety of independently-funded research projects. CSDMS has played a key role in shifting the paradigm for open code sharing in the earth surface processes by facilitating resource sharing through model, data and education repositories on the CSDMS web portal.  CSDMS also offers a variety of services to commun`e processes and the geoscience subdiscipline of interest.  But along with their disciplinary expertise, however, they also need a strong foundation in programming, advanced computing skills and data analytics skills [National Science Foundation Advisory Committee for Cyberinfrastructure, 2011].
 Traditional Earth science education does not usually equip students with skills to use modern cyberinfrastructure and computing resources efficiently, or to become model developers [Campbell et al., 2013]. The Earth Surface Processes (ESP) community critically needs a platform to teach modern programming practices and high performance computing methods to develop innovative models that can be used to understand and predict how the earth’s surface responds to environmental change and human influence.
 The practice of modeling lies at the core of predictive ESP sciences and educators should engage students in building, testing, and applying models [Hestens, 1996; Manduca et al., 2008], but we found from a review of course catalogs that in practice the undergraduate curricula of more traditional disciplinary focused departments do not include this component [Campbell et al., 2013]. This issue is not entirely unique to ESP sciences. The geosciences today are intensively quantitative, and there is an urgent need for a workforce with strong STEM skills [National Research Council, 2012]. NSF recognizes as one of its 10 Big Ideas [National Science Foundation, 2016] that pathways are needed for educators to create a 21st-century workforce capable of effectively dealing with data [ED Ofﬁce of Educational Technology, 2017]. Moreover, an agile STEM workforce is considered a national priority [National Science Foundation Advisory Committee for Cyberinfrastructure, 2011]. Realizing this, CSDMS provides hands-on training opportunities during meetings. Some efforts are meant to built foundation - teach graduate students skills in best programming practices and version controls in day-long short courses. Other outreach consist of short clinics, targeted to give potential users of cyberinfrastructure an active feel for certain models or modeling techniques, or to provide an update to experts on new developments.  More extensive separately organized hackathons bring together small science teams to work on solutions for more specific outstanding research problems.  For the first time in 2020, an immersive Earth Surface Processes Summer Institute is being organized online for a large group of students and early career scientists, focused solely on capacity building for East Surface Processes modeling.
 
