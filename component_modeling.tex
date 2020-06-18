@@ -182,11 +182,13 @@ For model source code, version control platforms have been developed, and are no
 
 %(note: this isn't meant to be a substitute for the BMI papers; it's just a relatively short summary, probably with a table or figure, plus a figure illustrating an application in the literature or underway, e.g., Hoch et al. (2017) and/or PRMS)
 
-% Outline
+% Outline:
 % 1. Intro to idea of BMI (use Greg's intro to BMI docs
 % 2. Description of BMI methods
 %   a. Include table
-% 3. Example of BMI use w/ figure (I like Greg's suggestion of Hoch paper.
+%   b. Include sample code
+% 3. Example of BMI use in research (I like Greg's suggestion of Hoch paper)
+%   a. Include figure
 
 When you climb in the driver's seat of an unfamiliar car,
 you are presented with a familiar sight:
@@ -205,10 +207,6 @@ This standard interface makes operating a car much easier
 than if each one presented a radically different interface.
 Imagine a world where switching from a sports car to a pickup truck
 required months of study and practice!
-
-%Similarly, railroads benefit from a standard for coupling rail cars together.
-%The result: trains can be assembled from combinations of all sorts of different rail cars,
-%built by different companies, in different places, and with different purposes.
 
 We believe that numerical models should offer a similar standardization.
 To this end,
@@ -288,7 +286,7 @@ to the original specification.
 
 While a BMI can be written for any language,
 CSDMS currently supports four languages: C, C++, Fortran, and Python.
-An example of using BMI with Fortran 2003
+A simple example of using a BMI written in Fortran
 is shown in Listing~\ref{listing:bmi_code} below.
 
 % minted is super cool, nicer than just verbatim -MP
@@ -312,17 +310,29 @@ is shown in Listing~\ref{listing:bmi_code} below.
 \label{listing:bmi_code}
 \end{listing}
 
-Show a code sample here.
-PRMS (describe the model), written in Fortran.
-Reference Regan paper.
-Show and explain calls to initialize, update, finalize.
-Comment how there's no need to know how PRMS works;
-you just need to use the BMI functions to drive it (ha!).
+The model shown in this example
+is the Precipitation Runoff Modeling System (PRMS),
+developed by the U.S. Geological Survey.
+\todo{Cite Regan paper, or find a way to cite PRMS6.}
+In the example,
+the model is initialized from its native configuration file,
+then stepped forward through time until it reaches its stop time,
+whereupon any resources it uses are deallocated.
+Note that only BMI function calls are used to drive the model;
+no knowledge of the underlying native calls to PRMS are needed.
 
-An example of BMI use in current research.
-Use a Hoch paper.
-Show one of his figures.
-
+Hoch et al (2019) provide an example of BMI use in current research.
+\todo{Cite Hoch et al. (2019).}
+In their study,
+they coupled, through BMI, a hydrologic model, PCR-GLOBWB,
+with the hydrodynamic models CaMa-Flood and LISFLOOD-FP.
+They show that the coupled model system
+enhances the accuracy of peak discharge simulations
+(Figure 6 from their paper)
+and improved representation of observed flood extent in flood maps
+(Figure 7 from their paper).
+% Show one of his figures.
+% Just need another sentence or two of explanation and wrap-up.
 
 \subsection{Language Interoperability: The Babelizer}
 
