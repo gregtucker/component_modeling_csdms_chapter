@@ -298,7 +298,7 @@ While a BMI can be written for any language,
 CSDMS currently supports four languages: C, C++, Fortran, and Python.
 A simple example of using a BMI written in Fortran
 is shown in Listing~\ref{listing:bmi_code} below.
-
+%
 % minted is super cool, nicer than just verbatim -MP
 \begin{listing}[ht]
 \topcaption{Example Fortran BMI code.}
@@ -319,11 +319,10 @@ is shown in Listing~\ref{listing:bmi_code} below.
 \end{minted}
 \label{listing:bmi_code}
 \end{listing}
-
+%
 The model shown in this example
 is the surface water component of the Precipitation Runoff Modeling System (PRMS),
-developed by the U.S. Geological Survey.
-\todo{Cite Regan paper, or find a way to cite PRMS6.}
+developed by the U.S. Geological Survey \citep{leavesley1984precipitation}.
 In the example,
 the model is initialized from its native configuration file,
 then stepped forward in time until it reaches its stop time,
@@ -331,7 +330,7 @@ whereupon any resources it uses are deallocated.
 Note that only BMI function calls are used to drive the model;
 no knowledge of the underlying native calls to control PRMS are needed.
 
-\citet{hoch2019evaluating} provide a current research example of using BMI. 
+\cite{hoch2019evaluating} provide a current research example of using BMI. 
 In their study,
 they coupled a hydrologic model, PCR-GLOBWB,
 with a pair of hydrodynamic models, CaMa-Flood and LISFLOOD-FP,
@@ -340,16 +339,16 @@ They observed (see Figure~\ref{fig:hoch_2019_fig6}) that a coupled model system
 enhanced the accuracy of peak discharge simulations.
 %and improved representation of observed flood extent in flood maps
 %(Figure 7 from their paper).
-
+%
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.8]{Figures/nhess-19-1723-2019-f06.png}
 \caption{Simulated discharge at a river monitoring station from coupled hydrologic and hydrodynamic models. (Reproduced from Figure 6 from \citet{hoch2019evaluating}.)}
 \label{fig:hoch_2019_fig6}
 \end{figure}
-
-\citep{hoch2019evaluating} conclude
-that: `Results confirm that model coupling can indeed be a viable way forward towards more integrated flood simulations. However, results also suggest that the accuracy of coupled models still largely depends on the model forcing.'
+%
+\citeauthor{hoch2019evaluating} conclude
+that ``Results confirm that model coupling can indeed be a viable way forward towards more integrated flood simulations. However, results also suggest that the accuracy of coupled models still largely depends on the model forcing.''
 
 \subsection{Language Interoperability: The Babelizer}
 
@@ -451,9 +450,85 @@ The practice of modeling lies at the core of predictive ESP sciences, and educat
 \section{Discussion}
 \label{sec:discussion}
 
-(MAYBE THIS SHOULD INCLUDES NEEDS AND OPPY'S)
+Things to include:
 
-\section{Needs and Opportunities}
+- in the earth-surface geosciences, research-oriented numerical modeling in the past (say late 90s) was characterized by two things: (1) project-oriented software dev that was basically shelved after the project (e.g., thesis), and (2) longer lived software that was kept in the domain of a research group. 
+
+- as modeling-oriented research scales up, this won't work anymore. Too inefficient and error-prone.
+
+- not just a tech challenge but a human one too. csdms has approached it with 3 pillars, which we'll reflect on in turn.
+
+- community: value of a culture of sharing, feeling part of a community that is united by a common interest in a broader theme (earth's surface) and a common approach (modeling). critical role of CULTURE and INCENTIVES. maybe some stuff from bangerth and turk. success in changing culture to one of greater sharing. not so much success so far in a culture of putting in the extra effort for reuse, repro.
+
+- hmm, but is this the best organization? somehow it's more intertwined than that... what if we organize around remaining challenges, let's see what that might look like:
+
+- from my personal perspective, what's still lacking? here's a list, in no particular order
+
+o training in programming. i've seen so much geoscientist code that is sloppy. need LITERATE programming. need tests. need doc. all that in turn requires opportunities to learn, incentives to do so, and incentives to take the extra effort to put the lessons into practice. and culture of quality. carrots and sticks.
+
+o creating modular, interoperable, standardized sw. writing clean understandable research sw helps interoperability, but sustainable sw needs a bit more than that: it needs standards and documentation too, and a community infrastructure to help. again, carrots and sticks.
+
+o sustained support for community facilities: a pinch of expertise and coordination can lead to a stone soup... but funding agencies have to commit. cores report that infrastructure includes cyber and people.
+
+o reproducibility: we still have a long way to go.
+
+o standards: BMI/BDI are a good start. but it would also help to have standards for I/O formats, standards or at least guidelines for code organization and quality, for documentation, for... Talk about OMF.
+
+o componentization: CSDMS and landlab show the power of componentization for reuse. 
+
+- incentives to write open, sustainable, reproducible (FAIR) software.
+
+Let's take a step even further back. The Discussion section is where you tell the readers what are the key takeaways from the material they've read up to this point. So what would be the things I want people to take away?
+
+* As computational modeling has grown to become a pillar of ees, it has come with some growing pains. The culture of practice that evolved around modeling in the last century now impedes progress.
+
+* Readers who want to understand `what is CSDMS', such as new chairs or prospective chairs, or people in other fields looking to do something similar (e.g., Keith G; folks at WIG): what are the activities, tools, and technologies, and why are they useful/important?
+
+* Funding agency program officers: what is CSDMS all about? What are some of the key challenges in this sphere? 
+
+* And, important: Software IS infrastructure, and needs support in order for it not to be a bottleneck.
+
+* Scientific productivity can be enhanced by better coordination and standardization, and by adoption of tools and protocols.
+
+* For researchers used to the `hacking' method (and/or the advisers of such students): there is another, better way. Software shouldn't be something you throw away after a project.
+
+* Our community needs better training in computing.
+
+* For more serious/proficient modelers (e.g., keepers of big codes), here are some approaches that this community has taken that are worth considering, e.g., BMI. Similar for people interested in model integration (e.g., USGS).
+
+* For people interested in data repositories, standards, distribution, etc. (e.g., EarthCube folks): model codes are a kind of research data too, and can be distributed/shared in repositories using FAIR principles.
+
+* For people who are concerned about the extra effort it takes to do things the `right way': there are ways to get credit for your extra work via sw journals and doi's.
+
+* The component-based approach has some key advantages, and should be adopted more broadly. The advantages are shown by the success of Landlab and pymt/BMI. Advantages include ability to build on others' work through reuse, having a template for development/testing/documentation, and greater interoperability.
+
+* We have a way to go still re reproducibility.
+
+TODO NEXT: FLESH THIS OUT; ORGANIZE IT INTO THE OUTLINE FOR A NARRATIVE
+
+I'm groping here for a good story arc for the discussion, one to encapsulate and frame the various points above.
+
+Twenty years ago, researchers all too often treated their numerical modeling software as disposable: created for a particular project or thesis, and then abandoned, leaving the job for the next person to recreate it from whole cloth. ...
+
+Environmental modelling has come a long way in the last two decades. Working with modelling software---whether as sophisticated environmental process simulations, or simply as scripts that transform raw data into meaningful numbers---is now a routine research task. The establishment of computing as a new pillar ...
+
+======
+
+In May 2020, the US National Science Foundation released a special report, prepared by the National Academy, on research opportunities in the earth sciences. The report highlighted three unique types of research infrastructure: instrumentation, human infrastructure, and cyberinfrastructure. The recognition of cyberinfrastructure as a distinct form of research infrastructure signifies the critical role that computing now plays in the earth and environmental sciences. Environmental modelling, and the software and culture-of-practice that supports it, constitutes a key part of that cyberinfrastructure.
+
+The earth and environmental research community has a responsibility to be good stewards of their hard-won data. The same holds for cyberinfrastructure. In terms of environmental modelling, the research enterprise benefits when the software and related infrastructure is shared, coordinated, and interoperable. 
+
+...ok, from here, introduce some of the key points above:
+
++ csdms in the last 13 years has discovered tools and practices that have shown some success in coordination
+
++ sharing of codes: avoids wheel reinvention
+
++ ...one by one, a list of things
+
+
+
+
 
 
 
