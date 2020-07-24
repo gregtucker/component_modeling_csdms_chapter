@@ -450,6 +450,62 @@ The practice of modeling lies at the core of predictive ESP sciences, and educat
 \section{Discussion}
 \label{sec:discussion}
 
+
+======
+
+In May 2020, the US National Science Foundation released a special report, prepared by the National Academy, on research opportunities in the earth sciences. The report highlighted three unique types of research infrastructure: instrumentation, human infrastructure, and cyberinfrastructure. The recognition of cyberinfrastructure as a distinct form of research infrastructure signifies the critical role that computing now plays in the earth and environmental sciences. Environmental modelling, and the software and culture-of-practice that supports it, constitutes a key part of that cyberinfrastructure. In other words, research software is infrastructure, and deserving of the same care and attention as a laboratory or field station.
+
+The research enterprise benefits when modeling  software and tools are shared, coordinated, and interoperable, such that the six model operation tasks listed in Table~\ref{tab:taxonomy} are simplified. For the earth surface sciences, the CSDMS Model Repository provides a community platform for finding and sharing model codes and related tools. In addition to acting as a valuable community resource, the Repository provides a solution to the growing mandate from journals and funding agencies to make research software openly available. The provision of standardized metadata and bibliographic information helps those who are looking for models to compare and evaluate the alternatives.
+
+Simply providing source code and metadata is not enough, however. In order for earth and environmental models to function as community resources, they must be usable. One of the key dimensions of usability is interoperability. The BMI standard promotes interoperability by reducing the learning curve for executing and querying models, and by greatly simplifying the process of linking (one way) or coupling (two way) models. A model program equipped with a BMI becomes an interoperable, standardized component: an element of a system, rather than an idiosyncratic stand-alone product. One of the key abilities offered by a BMI-enabled model is run-time control, query, and modification. Because BMI supports step-wise execution, a user can effectively pause a model in mid-run to inspect its state variables, and modify parameters or data. This capability allows sequential coupling of models using simple scripts. The ability to query and modify values also enables tight coupling. For example, if a collection of component models are treated as representing individual terms in a governing equation, a coupling script could be used to query each component's derivatives, construct a matrix, solve it, and then pass the updated state variables back to the individual components.
+
+One advantage of BMI is that it is language agnostic, and can in principle be implemented in nearly any programming language. It can, for example, accommodate legacy codes written in Fortran. The disadvantage of language flexibility is that BMI addresses the least common denominator, and therefore does not take advantage of the more advanced features available in some languages, such as object-oriented capabilities. To some extent this disadvantage can be addressed by building more specialized, language-specific interfaces in parallel with a BMI. For example, Landlab components, which are implemented as classes, use a lightweight, Python-specific interface that takes advantage of that language's object-oriented capabilities, advanced data types, and parameter-passing syntax. At the same time, Landlab also includes functionality to translate any of its components into a standard BMI component, so they can be integrated with components written in other languages.
+
+The flexibility that BMI offers has led to its adoption in a variety of different applications, including US Geological Survey rainfall-runoff models \ref{}, hydrodynamic modeling (including flagship models developed by Deltares and the Netherlands eScience Center) \ref{}, delta and coastline evolution modeling \ref{ratliff2018}, and modeling of methane emissions \ref{fox2020agent}, to name a few. One disadvantage of a standard interface like BMI is the extra up-front investment in program development. Researchers may not perceive value in adding a standard interface to a legacy code, or writing it into a new code. However, our experience is that this effort usually more than pays for itself over the duration of a project. Code written to a standard like BMI tends to be more modular and therefore easier to maintain. Existing templates for common languages in the earth and environmental sciences make the process of providing a BMI to a new program is relatively painless: just a matter of filling in a set of pre-defined function names and signatures \citep{hutton2020basic}. Adding a BMI to an existing legacy model can be a bit more involved, depending on how the program code is structured, because it often requires some degree of refactoring. Even in that case, we find that adding a BMI to a legacy model often makes that code more understandable and adaptable.
+
+The variety of different programming languages used in the earth and environmental sciences community presents a barrier to interoperability. The majority of models and tools in the CSDMS Repository written in C, C++, Fortran, Python, and Matlab \ref{}[ADD FIGURE]. Other languages used in CSDMS constituent communities include R (especially in ecosystem dynamics) and NetLogo's java-based scripting language (for agent-based modeling). Crossing the language barrier requires language-bridging tools. Translating all of the existing code into a single, common language would be impractical, even if the community could agree on which language to use. A more effective solution is to \textit{librarize} models and tools \citep{brown2014run} as components that can be accessed and executing through a high-level scripting language. In CSDMS' case, the Babelizer tool provides this capability for codes written in C, C++, and Fortran, using Python as the high-level linga franca.
+
+Librarization can be applied to data sets too. The CSDMS Workbench accomplishes this with Data Components that provide function-call access to various data sets. Using the BMI syntax for data access removes the need to worry about data format, and makes it easier to swap between data sets and models (for example, data versus model of ocean-wave properties) as components in a linked system. In this case, the BMI does not replace the more sophisticated data-access capabilities of a language-specific library like xarray, but it has the advantage of providing a consistent interface across multiple languages.
+
+For building and modifying numerical models, the CSDMS Workbench provides Landlab as a Python-specific solution for 2D, grid-based applications. Experience with Landlab since its introduction has shown that a library of model `building blocks' can greatly reduce the barriers to the software side of model creation. One indicator of the success of this approach is the growing number of  Landlab-built models created by doctoral students as part of a larger body of dissertation research \citep[e.g.,][]{adams2017landlab,gray2017off,shobe2017space,lai2018modeled,langston2018developing,schmidt2018effect,strauch2018hydro,glade2019canyon,reitman2019landscape,carriere2020impact,litwin2020groundwaterdupuitpercolator}. 
+
+ok, what to say about LL? ability to assemble the basic building blocks of a numerical model, including the grid data structures and common numerical functions, is effective at speeding model development. Similarly, the packaging ... well, list of things we can point to:
+
+- pre-built library elements to handle grids, I/O, and common numerical operations is effective. GDP as example.
+
+- reusable components allows for rapid construction of complete, multi-element models. TB as example (would not have been possible w/o). GDP to DupuitLEM.
+
+- documentation is huge: examples of folks picking up LL based on tutorial examples, and modifying for new applications. (cite Lawrence paper)
+
+- LL despite the name not just for land...
+
+NEXT UP: Data components; Landlab; community stuff
+
+THEN: needs and opportunities, including...
+
+
+
+
+[MARK OR ERIC CAN YOU HELP OUT HERE, I WANT A LIST OF ORGANIZATIONS AND/OR APPLICATIONS, IDEALLY WITH PUBS IF POSSIBLE]
+
+
+
+
+========
+
+now, what else do i want to say about bmi? it's been adopted by usgs, deltares, escience, ... and that it's language agnostic. disadvantages: requires refactoring
+
+
+...ok, from here, introduce some of the key points above:
+
++ csdms in the last 13 years has discovered tools and practices that have shown some success in coordination
+
++ sharing of codes: avoids wheel reinvention
+
++ ...one by one, a list of things
+
+
+
 Things to include:
 
 - in the earth-surface geosciences, research-oriented numerical modeling in the past (say late 90s) was characterized by two things: (1) project-oriented software dev that was basically shelved after the project (e.g., thesis), and (2) longer lived software that was kept in the domain of a research group. 
@@ -511,23 +567,6 @@ I'm groping here for a good story arc for the discussion, one to encapsulate and
 Twenty years ago, researchers all too often treated their numerical modeling software as disposable: created for a particular project or thesis, and then abandoned, leaving the job for the next person to recreate it from whole cloth. ...
 
 Environmental modelling has come a long way in the last two decades. Working with modelling software---whether as sophisticated environmental process simulations, or simply as scripts that transform raw data into meaningful numbers---is now a routine research task. The establishment of computing as a new pillar ...
-
-======
-
-In May 2020, the US National Science Foundation released a special report, prepared by the National Academy, on research opportunities in the earth sciences. The report highlighted three unique types of research infrastructure: instrumentation, human infrastructure, and cyberinfrastructure. The recognition of cyberinfrastructure as a distinct form of research infrastructure signifies the critical role that computing now plays in the earth and environmental sciences. Environmental modelling, and the software and culture-of-practice that supports it, constitutes a key part of that cyberinfrastructure.
-
-The earth and environmental research community has a responsibility to be good stewards of their hard-won data. The same holds for cyberinfrastructure. In terms of environmental modelling, the research enterprise benefits when the software and related infrastructure is shared, coordinated, and interoperable. 
-
-...ok, from here, introduce some of the key points above:
-
-+ csdms in the last 13 years has discovered tools and practices that have shown some success in coordination
-
-+ sharing of codes: avoids wheel reinvention
-
-+ ...one by one, a list of things
-
-
-
 
 
 
