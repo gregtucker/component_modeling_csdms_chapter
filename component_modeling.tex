@@ -406,6 +406,8 @@ To address the second model-building task, Landlab provides two capabilities. Fi
 The Component base class was designed to expose a BMI such that conversion of Landlab Components to pymt components is trivial. 
 \todo[inline,color=yellow]{KRB: I think it would be best if Eric finished this section}
 
+Despite the name, Landlab is not restricted to terrestrial processes. Its component collection includes, for example, coastal and marine components for processes such as tidal circulation and deltaic sedimentation. More generally, its design is amenable to a wide variety of 2D grid-based numerical models and cellular automata applications beyond the earth and environmental sciences.
+
 The design of Landlab supports a variety of usage styles. Interested users and/or developers may use Landlab to create models as Components, or as scripts that combine components. Alternatively, Landlab can be used to build stand-alone packages packages such as \texttt{terrainbento} \citep{barnhart2019terrainbento}, which combine Landlab Components into a predefined set of models.
 
 % GREGS NOTES:
@@ -450,9 +452,6 @@ The practice of modeling lies at the core of predictive ESP sciences, and educat
 \section{Discussion}
 \label{sec:discussion}
 
-
-======
-
 In May 2020, the US National Science Foundation released a special report, prepared by the National Academy, on research opportunities in the earth sciences. The report highlighted three unique types of research infrastructure: instrumentation, human infrastructure, and cyberinfrastructure. The recognition of cyberinfrastructure as a distinct form of research infrastructure signifies the critical role that computing now plays in the earth and environmental sciences. Environmental modelling, and the software and culture-of-practice that supports it, constitutes a key part of that cyberinfrastructure. In other words, research software is infrastructure, and deserving of the same care and attention as a laboratory or field station.
 
 The research enterprise benefits when modeling  software and tools are shared, coordinated, and interoperable, such that the six model operation tasks listed in Table~\ref{tab:taxonomy} are simplified. For the earth surface sciences, the CSDMS Model Repository provides a community platform for finding and sharing model codes and related tools. In addition to acting as a valuable community resource, the Repository provides a solution to the growing mandate from journals and funding agencies to make research software openly available. The provision of standardized metadata and bibliographic information helps those who are looking for models to compare and evaluate the alternatives.
@@ -465,23 +464,20 @@ The flexibility that BMI offers has led to its adoption in a variety of differen
 
 The variety of different programming languages used in the earth and environmental sciences community presents a barrier to interoperability. The majority of models and tools in the CSDMS Repository written in C, C++, Fortran, Python, and Matlab \ref{}[ADD FIGURE]. Other languages used in CSDMS constituent communities include R (especially in ecosystem dynamics) and NetLogo's java-based scripting language (for agent-based modeling). Crossing the language barrier requires language-bridging tools. Translating all of the existing code into a single, common language would be impractical, even if the community could agree on which language to use. A more effective solution is to \textit{librarize} models and tools \citep{brown2014run} as components that can be accessed and executing through a high-level scripting language. In CSDMS' case, the Babelizer tool provides this capability for codes written in C, C++, and Fortran, using Python as the high-level linga franca.
 
-Librarization can be applied to data sets too. The CSDMS Workbench accomplishes this with Data Components that provide function-call access to various data sets. Using the BMI syntax for data access removes the need to worry about data format, and makes it easier to swap between data sets and models (for example, data versus model of ocean-wave properties) as components in a linked system. In this case, the BMI does not replace the more sophisticated data-access capabilities of a language-specific library like xarray, but it has the advantage of providing a consistent interface across multiple languages.
+Librarization can be applied to data sets too. The CSDMS Workbench accomplishes this with Data Components that provide function-call access to various data sets. Using the BMI syntax for data access removes the need to worry about data formats, and makes it easier to swap between data sets and models (for example, data versus model of ocean-wave properties) as components in a linked system. In this case, the BMI does not replace the more sophisticated data-access capabilities of a language-specific library like xarray, but it has the advantage of providing a consistent interface across multiple languages.
 
 For building and modifying numerical models, the CSDMS Workbench provides Landlab as a Python-specific solution for 2D, grid-based applications. Experience with Landlab since its introduction has shown that a library of model `building blocks' can greatly reduce the barriers to the software side of model creation. One indicator of the success of this approach is the growing number of  Landlab-built models created by doctoral students as part of a larger body of dissertation research \citep[e.g.,][]{adams2017landlab,gray2017off,shobe2017space,lai2018modeled,langston2018developing,schmid2018effect,strauch2018hydroclimatological,glade2019canyon,reitman2019offset,carriere2020impact,litwin2020groundwaterdupuitpercolator}. The ability to assemble models out of reusable `process components' allows for rapid construction of complete, multi-element models. One example of the value of rapid model assembly is a recent  comparative testing and calibration study of long-term landform evolution models \citep{barnhart2020inverting1,barnhart2020inverting2}. The study authors used Landlab to develop a Python package for multi-model analysis of drainage basin evolution \citep{barnhart2019terrainbento}. The package allowed for the exploration and testing of 37 mathematically distinct models, as alternative hypotheses. This example illustrates how flexible, component-based modeling software promotes hypothesis testing. 
 
+Experience with BMI, pymt, and Landlab highlights the critical importance of documentation, consistent with the findings of \citet{lawrence2015science}. Tutorial examples in particular provide a starting point that users can build on. Embedding tutorials in Jupyter Notebooks provides an effective way to combine descriptive text, program code, plots, and formatted mathematics. For reference-level documentation, document generator tools like Sphinx and doxygen translate internal documentation (comment blocks inside source code) into nicely formatted, web-accessible reference material.
 
-- documentation is huge: examples of folks picking up LL based on tutorial examples, and modifying for new applications. (cite Lawrence paper)
 
-- LL despite the name not just for land...
 
-NEXT UP: Data components; Landlab; community stuff
+NEXT UP: community stuff
 
 THEN: needs and opportunities, including...
 
 
 
-
-[MARK OR ERIC CAN YOU HELP OUT HERE, I WANT A LIST OF ORGANIZATIONS AND/OR APPLICATIONS, IDEALLY WITH PUBS IF POSSIBLE]
 
 
 
