@@ -103,43 +103,51 @@ In the following sections, we describe the software technology, community buildi
 \section{A Taxonomy of Model Operation}
 \label{sec:taxonomy}
 
-Our practical interest here is in the tasks that computational modeling often requires, and how those tasks might be made more efficient. To that end, it is useful to define a taxonomy of model-operation tasks. Here we identify six distinct types of model-related activity, each of which has a unique set of challenges and potential bottlenecks. These six activities are arranged in order of complexity: in general, each level involves some elements of work in the levels below, plus some additional needs. The six modeling modes are summarized in Table~\ref{tab:taxonomy}.
+Our practical interest here is in the tasks that computational modeling often requires, and how those tasks might be made more efficient. To that end, it is useful to define a taxonomy of model-operation tasks. Here we identify six distinct types of model-related activity, each of which has a unique set of challenges and potential bottlenecks. These six activities are arranged in order of complexity: in general, each level involves some elements of work in the levels below, plus some additional needs. The six modeling modes are summarized in Figure~\ref{fig:taxonomy}.
 
-Before expanding on these, it is helpful to clarify some terminology. The word `model,' whether used as a noun or a verb in a science and engineering context, has many different shades of meaning \citep[e.g.,][]{bras2003six}. Here we use the term \textit{mathematical model} to mean a set of equations and/or algorithms that represents a natural and/or engineered system. A \textit{numerical model} is a set of algorithms that implement a numerical solution (often approximate rather than exact) to a mathematical model, given a set of inputs. A \textit{model program} or \textit{model code} is a set of computer instructions, written in a given programming language, that implements a numerical solution or algorithm. Note that these are not always perfectly overlapping categories. A single model code might provide the user with several different options for mathematical models or numerical algorithms. Conversely, a distinct model code might be designed to operate as a component in a larger coupled model, rather than as a stand-alone program, as with the component-based approach that we discuss here. In this paper, the word `model' by itself generally refers to a model program.
+Before expanding on these, it is helpful to clarify some terminology. The word `model,' whether used as a noun or a verb in a science and engineering context, has many different shades of meaning \citep[e.g.,][]{bras2003six}. Here we use the term \textit{mathematical model} to mean a set of equations and/or algorithms that represents a natural and/or engineered system. A \textit{numerical model} is a set of algorithms that implement a numerical solution (often approximate rather than exact) to a mathematical model, given a set of inputs. A \textit{model program} or \textit{model code} is a set of computer instructions, written in a given programming language, that implements a numerical solution or algorithm. Note that these are not always perfectly overlapping categories. A single model code might provide the user with several different options for mathematical models or numerical algorithms. Conversely, a distinct model code might be designed to operate as a component in a larger coupled model, rather than as a stand-alone program, as with the component-based approach that we discuss here. In this paper, the word `model' by itself generally refers to a model program(s), including any scripts used for pre- or post-processing, analysis, visualization, etc. A model program can range in complexity from a simple short script to a multi-featured software package or library containing tens of thousands of lines of program code.
 
 
 
 % Requires the booktabs if the memoir class is not being used
-\begin{table}[htbp]
-   \centering
-   \topcaption{Taxonomy of Numerical Modeling Tasks} % requires the topcapt package
-   \begin{tabular}{>{\centering\arraybackslash}p{6in}} % Column formatting, @{} suppresses leading/trailing space
-      \toprule
-      {\centering BUILD} \\
-      Write a new numerical model program.\\
-      Debug and test.\\
-      \midrule
-      COUPLE \\
-      Iteratively exchange data and execute two different model programs or components. \\
-      May involve independent iteration (`loose coupling') or simultaneous solution to coupled set of equations (`tight coupling') \\
-      \midrule
-      MODIFY \\
-      Modify source code to change or enhance what the model does. \\
-      \midrule
-      LINK \\
-      Feed the output(s) of one model as input(s) to another in a sequential (one way) workflow.\\
-      \midrule
-      APPLY \\
-      Apply an existing program to a new problem or situation.\\
-      Usually requires configuring new inputs.\\
-      \midrule
-      REPRODUCE \\
-      Run a model program with pre-established inputs in order to learn a principle, demonstrate operation, or reproduce a known result.\\
-      Requires knowing how to operate the program and inspect the output.\\
-      \bottomrule
-   \end{tabular}
-   \label{tab:taxonomy}
-\end{table}
+% \begin{table}[htbp]
+%   \centering
+%   \topcaption{Taxonomy of Numerical Modeling Tasks} % requires the topcapt package
+%   \begin{tabular}{>{\centering\arraybackslash}p{6in}} % Column formatting, @{} suppresses leading/trailing space
+%       \toprule
+%       {\centering BUILD} \\
+%       Write a new numerical model program.\\
+%       Debug and test.\\
+%       \midrule
+%       COUPLE \\
+%       Iteratively exchange data and execute two different model programs or components. \\
+%       May involve independent iteration (`loose coupling') or simultaneous solution to coupled set of equations (`tight coupling') \\
+%       \midrule
+%       MODIFY \\
+%       Modify source code to change or enhance what the model does. \\
+%       \midrule
+%       LINK \\
+%       Feed the output(s) of one model as input(s) to another in a sequential (one way) workflow.\\
+%       \midrule
+%       APPLY \\
+%       Apply an existing program to a new problem or situation.\\
+%       Usually requires configuring new inputs.\\
+%       \midrule
+%       REPRODUCE \\
+%       Run a model program with pre-established inputs in order to learn a principle, demonstrate operation, or reproduce a known result.\\
+%       Requires knowing how to operate the program and inspect the output.\\
+%       \bottomrule
+%   \end{tabular}
+%   \label{tab:taxonomy}
+% \end{table}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.8]{Figures/model_operation_taxonomy.pdf}
+\caption{Taxonomy of model operation tasks.}
+\label{fig:taxonomy}
+\end{figure}
+
 
 \subsection{Reproducing}
 
@@ -176,7 +184,14 @@ Not all that long ago, making model source code free available was more the exce
 
 However, science clearly benefits from openly shared source code. For one, sharing reduces duplication. After all, there is less need to (re)write a model from scratch, once (part of) a model has proven to capture a certain process well. Therefore, sharing of source code accelerates science, as others are on a faster trajectory to learn from and build upon previous model development efforts. Sharing of source code also makes science more robust and trusted. Reproducing computational results requires openly shared source code. Sharing also hardens the code, as people can report bugs and bug fixes. It is therefore encouraging to see a modeling culture shift over the last two decades, in a fashion similar to what has taken place for data \citep[e.g.,][]{hsu2015data}. For good data management, there are now the FAIR principals ---Findability, Accessibility, Interoperability, and Reusability---that have been formulated as guideline to data producers and publishers \cite{wilkinson2016fair}. According to the FAIR principles, each dataset should have a unique digital object identifier (DOI) to get to the data, associated with searchable metadata. By including a formal, broadly applicable representation language, and using open and widely accepted domain-relevant vocabularies and ontologies, data sets become more interoperable. And by providing an abundance of documents that describe datasets and how they can be used, including license information, data becomes more reusable.
 
-For model source code, version control platforms have been developed, and are now widely used for sharing source code and collaborating in code development. But as the data-FAIR principals indicate, sharing source code by itself is not enough. Therefore, CSDMS implemented the FAIR principals in setting up a model repository for earth surface dynamics. A minimal set of metadata parameters is defined to: describe a model, provide contact information for the model development team, indicate technical details such as operating platform(s) and the software license, describe the model input and output, list its processes and key physical parameters, and indicate limitations. This minimal set of metadata includes a link to the actual source code, which needs to be either made available 24/7 through a personal web repository, or through the CSDMS community repository. All model metadata stored on the CSDMS web server, as well as the actual source code (when stored in the CSDMS code repository on GitHub) are accessible for machines through web APIs, as emphasized by the FAIR protocols to automatically find and use the data, in addition to supporting access by individuals. DOIs for stable versions of the model source code are generated on request and included with the metadata. Model metadata are enriched by including additional reference information, such a comprehensive bibliography pertaining to a particular model. Following this practice, the CSDMS model repository currently holds over 370 open source models of the community (as of June 2020).
+For model source code, version control platforms have been developed, and are now widely used for sharing source code and collaborating in code development. But as the data-FAIR principals indicate, sharing source code by itself is not enough. Therefore, CSDMS implemented the FAIR principals in setting up a model repository for earth surface dynamics. A minimal set of metadata parameters is defined to: describe a model, provide contact information for the model development team, indicate technical details such as operating platform(s) and the software license, describe the model input and output, list its processes and key physical parameters, and indicate limitations. This minimal set of metadata includes a link to the actual source code, which needs to be either made available 24/7 through a personal web repository, or through the CSDMS community repository. All model metadata stored on the CSDMS web server, as well as the actual source code (when stored in the CSDMS code repository on GitHub) are accessible for machines through web APIs, as emphasized by the FAIR protocols to automatically find and use the data, in addition to supporting access by individuals. DOIs for stable versions of the model source code are generated on request and included with the metadata. Model metadata are enriched by including additional reference information, such a comprehensive bibliography pertaining to a particular model. Following this practice, the CSDMS model repository currently holds over 370 open source models of the community (as of June 2020). The models and tools in the repository span a range of languages, with Python, C, and Fortran being the most popular (Figure~\ref{fig:languages}). The diversity of languages raises a challenge in creating an interoperable framework. We will return to this point, and look at one solution, in Section~\ref{sec:babelizer}.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.8]{Figures/languages_in_repository.pdf}
+\caption{Distribution of different languages used by models and tools in the CSDMS Model Repository (percentages out of 453 total programs; not weighted by program size).}
+\label{fig:languages}
+\end{figure}
 
 
 \section{The CSDMS Workbench}
@@ -351,12 +366,15 @@ enhanced the accuracy of peak discharge simulations.
 that ``Results confirm that model coupling can indeed be a viable way forward towards more integrated flood simulations. However, results also suggest that the accuracy of coupled models still largely depends on the model forcing.''
 
 \subsection{Language Interoperability: The Babelizer}
+\label{sec:babelizer}
+
+refer to Figure~\ref{fig:languages} somewhere in this section
 
 - need a lingua franca; here, Python because of its popularity, num/sci libraries, and high-level interpreted nature
 
 - babelizer: tools and procedures to take BMI'd code in C, C++, F, (Julia??) and convert to Python-callable module
 
-- include pie chart of most popular languages in repo
+
 
 - notion that the BMI specification makes it relatively straightforward to add a language (or should this go under BMI?)
 
@@ -462,7 +480,7 @@ One advantage of BMI is that it is language agnostic, and can in principle be im
 
 The flexibility that BMI offers has led to its adoption in a variety of different applications, including US Geological Survey rainfall-runoff models \ref{}, hydrodynamic modeling (including flagship models developed by Deltares and the Netherlands eScience Center) \ref{}, delta and coastline evolution modeling \ref{ratliff2018}, and modeling of methane emissions \ref{fox2020agent}, to name a few. One disadvantage of a standard interface like BMI is the extra up-front investment in program development. Researchers may not perceive value in adding a standard interface to a legacy code, or writing it into a new code. However, our experience is that this effort usually more than pays for itself over the duration of a project. Code written to a standard like BMI tends to be more modular and therefore easier to maintain. Existing templates for common languages in the earth and environmental sciences make the process of providing a BMI to a new program is relatively painless: just a matter of filling in a set of pre-defined function names and signatures \citep{hutton2020basic}. Adding a BMI to an existing legacy model can be a bit more involved, depending on how the program code is structured, because it often requires some degree of refactoring. Even in that case, we find that adding a BMI to a legacy model often makes that code more understandable and adaptable.
 
-The variety of different programming languages used in the earth and environmental sciences community presents a barrier to interoperability. The majority of models and tools in the CSDMS Repository written in C, C++, Fortran, Python, and Matlab \ref{}[ADD FIGURE]. Other languages used in CSDMS constituent communities include R (especially in ecosystem dynamics) and NetLogo's java-based scripting language (for agent-based modeling). Crossing the language barrier requires language-bridging tools. Translating all of the existing code into a single, common language would be impractical, even if the community could agree on which language to use. A more effective solution is to \textit{librarize} models and tools \citep{brown2014run} as components that can be accessed and executing through a high-level scripting language. In CSDMS' case, the Babelizer tool provides this capability for codes written in C, C++, and Fortran, using Python as the high-level linga franca.
+The variety of different programming languages used in the earth and environmental sciences community presents a barrier to interoperability. The majority of models and tools in the CSDMS Repository are written in C, C++, Fortran, Python, and Matlab \ref{}[ADD FIGURE]. Other languages used in CSDMS constituent communities include R (especially in ecosystem dynamics) and NetLogo's java-based scripting language (for agent-based modeling). Crossing the language barrier requires language-bridging tools. Translating all of the existing code into a single, common language would be impractical, even if the community could agree on which language to use. A more effective solution is to \textit{librarize} models and tools \citep{brown2014run} as components that can be accessed and executing through a high-level scripting language. In CSDMS' case, the Babelizer tool provides this capability for codes written in C, C++, and Fortran, using Python as the high-level linga franca.
 
 Librarization can be applied to data sets too. The CSDMS Workbench accomplishes this with Data Components that provide function-call access to various data sets. Using the BMI syntax for data access removes the need to worry about data formats, and makes it easier to swap between data sets and models (for example, data versus model of ocean-wave properties) as components in a linked system. In this case, the BMI does not replace the more sophisticated data-access capabilities of a language-specific library like xarray, but it has the advantage of providing a consistent interface across multiple languages.
 
@@ -476,85 +494,14 @@ One of the biggest challenges to a fully functional community software ecosystem
 
 Another challenge revolves around incentives. The community as a whole clearly benefits from a FAIR and sustainable research software ecosystem. As noted above, the advent of software journals and peer-reviewed repositories (such as COMSESnet and pyopensci) provides one mechanism to encourage the creation of lasting digital products. The reproducibility movement provides another useful push, and has led journals and funding agencies to raise their standards for sharing and accessibility of software and other digital products. To take advantage of this momentum, hiring and promotion committees at universities and research organizations need to acknowledge the value of contributions to high-quality research software. Professional societies can contribute by offering awards that recognize contributions to cyberinfrastructure.
 
-The third major challenge is support. Our experience with CSDMS demonstrates that a modest investment in community support can have a substantial positive impact on research productivity. 
+The third major challenge is support. Our experience with CSDMS demonstrates that a modest investment in community-oriented computing can have a substantial positive impact on research productivity. By investing in stable community repositories, interoperability standards, and software libraries and frameworks, a funding agency can increase the impact of its portfolio by incentivizing a shared, reusable and ever-improving community infrastructure of models, tools, and expertise. A key to making this approach scalable, in addition to incentives, is to provide sufficient documentation and consulting support to enable community members to create research cybertools that are Findable, Accessible, Interoperable, and Reusable. We have found from our own experience that consulting support is an especially important piece. Projects that engage a professional research software engineer---even if it is just at the level of general design advice, informal education, or help overcoming technical obstacles---tend to be much more likely to produce robust, flexible, sustainable software as a lasting broader impact of a project.
 
-stuff:
-
-- support includes 3 elements: community coordination, technology, and education... well and expertise. That's really key. Projects that engage a trained RSE are much more likely to produce robust, flexible, sustainable software are lasting broader impacts. That's super important.
+Computational modeling in the earth and environmental sciences has come a long way since the dawn of the 3rd millennium. The possibilities of a coordinated, community-wide cyber-ecosystem are starting to emerge. Fully achieving this vision will require a combination of education, incentives, and support. Universities, research agencies, and individual researchers all have a role to play.
 
 
 
 
 
-
-
-
-
-========
-
-
-
-Things to include:
-
-- in the earth-surface geosciences, research-oriented numerical modeling in the past (say late 90s) was characterized by two things: (1) project-oriented software dev that was basically shelved after the project (e.g., thesis), and (2) longer lived software that was kept in the domain of a research group. 
-
-- as modeling-oriented research scales up, this won't work anymore. Too inefficient and error-prone.
-
-- not just a tech challenge but a human one too. csdms has approached it with 3 pillars, which we'll reflect on in turn.
-
-- community: value of a culture of sharing, feeling part of a community that is united by a common interest in a broader theme (earth's surface) and a common approach (modeling). critical role of CULTURE and INCENTIVES. maybe some stuff from bangerth and turk. success in changing culture to one of greater sharing. not so much success so far in a culture of putting in the extra effort for reuse, repro.
-
-- hmm, but is this the best organization? somehow it's more intertwined than that... what if we organize around remaining challenges, let's see what that might look like:
-
-- from my personal perspective, what's still lacking? here's a list, in no particular order
-
-o training in programming. i've seen so much geoscientist code that is sloppy. need LITERATE programming. need tests. need doc. all that in turn requires opportunities to learn, incentives to do so, and incentives to take the extra effort to put the lessons into practice. and culture of quality. carrots and sticks.
-
-o creating modular, interoperable, standardized sw. writing clean understandable research sw helps interoperability, but sustainable sw needs a bit more than that: it needs standards and documentation too, and a community infrastructure to help. again, carrots and sticks.
-
-o sustained support for community facilities: a pinch of expertise and coordination can lead to a stone soup... but funding agencies have to commit. cores report that infrastructure includes cyber and people.
-
-o reproducibility: we still have a long way to go.
-
-o standards: BMI/BDI are a good start. but it would also help to have standards for I/O formats, standards or at least guidelines for code organization and quality, for documentation, for... Talk about OMF.
-
-o componentization: CSDMS and landlab show the power of componentization for reuse. 
-
-- incentives to write open, sustainable, reproducible (FAIR) software.
-
-Let's take a step even further back. The Discussion section is where you tell the readers what are the key takeaways from the material they've read up to this point. So what would be the things I want people to take away?
-
-* As computational modeling has grown to become a pillar of ees, it has come with some growing pains. The culture of practice that evolved around modeling in the last century now impedes progress.
-
-* Readers who want to understand `what is CSDMS', such as new chairs or prospective chairs, or people in other fields looking to do something similar (e.g., Keith G; folks at WIG): what are the activities, tools, and technologies, and why are they useful/important?
-
-* Funding agency program officers: what is CSDMS all about? What are some of the key challenges in this sphere? 
-
-* And, important: Software IS infrastructure, and needs support in order for it not to be a bottleneck.
-
-* Scientific productivity can be enhanced by better coordination and standardization, and by adoption of tools and protocols.
-
-* For researchers used to the `hacking' method (and/or the advisers of such students): there is another, better way. Software shouldn't be something you throw away after a project.
-
-* Our community needs better training in computing.
-
-* For more serious/proficient modelers (e.g., keepers of big codes), here are some approaches that this community has taken that are worth considering, e.g., BMI. Similar for people interested in model integration (e.g., USGS).
-
-* For people interested in data repositories, standards, distribution, etc. (e.g., EarthCube folks): model codes are a kind of research data too, and can be distributed/shared in repositories using FAIR principles.
-
-* For people who are concerned about the extra effort it takes to do things the `right way': there are ways to get credit for your extra work via sw journals and doi's.
-
-* The component-based approach has some key advantages, and should be adopted more broadly. The advantages are shown by the success of Landlab and pymt/BMI. Advantages include ability to build on others' work through reuse, having a template for development/testing/documentation, and greater interoperability.
-
-* We have a way to go still re reproducibility.
-
-TODO NEXT: FLESH THIS OUT; ORGANIZE IT INTO THE OUTLINE FOR A NARRATIVE
-
-I'm groping here for a good story arc for the discussion, one to encapsulate and frame the various points above.
-
-Twenty years ago, researchers all too often treated their numerical modeling software as disposable: created for a particular project or thesis, and then abandoned, leaving the job for the next person to recreate it from whole cloth. ...
-
-Environmental modelling has come a long way in the last two decades. Working with modelling software---whether as sophisticated environmental process simulations, or simply as scripts that transform raw data into meaningful numbers---is now a routine research task. The establishment of computing as a new pillar ...
 
 
 
@@ -582,8 +529,37 @@ Environmental modelling has come a long way in the last two decades. Working wit
 
 
 
+\newpage
 
-===================
+POTENTIAL ADDITIONAL FIGURES, BY SECTION:
+
+5.0 repo image
+
+6.0 maybe a summary of csdms workbench?
+
+6.1 bmi: model to component figure from my slides? (already has hoch figure)
+
+6.2 babelizer: pie charts of usage
+
+6.3 pymt: s2s example of tb-type model + sed flux? permafrost? cem + waves? have a few here, from tutorials, with code snippets
+
+6.4 DC's: have one
+
+6.5 LL: figure like the multi-examples slide, but with figures that we can easily get permission for. PLUS a s2s example!
+
+6.6 figure from Barnhart et al.
+
+7.0 maybe three bubbles: individual work (VC, testing, internal doc), collaborative project (issues and PRs), community resource (CI)
+
+8.0 open to ideas...
+
+9.0 bmi examples from usgs, deltares, escience
+
+
+
+
+
+
 
 RANDOM NOTES HERE:
 
