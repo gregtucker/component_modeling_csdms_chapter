@@ -5,10 +5,12 @@
 \usepackage{natbib}
 \usepackage{array}
 \usepackage{url}
+\usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{todonotes}
 \usepackage{listings} % make code listings -MP
 \usepackage{minted}   % pretty print code -MP
+
 
 % \geometry{landscape} % rotated page geometry
 
@@ -378,7 +380,13 @@ refer to Figure~\ref{fig:languages} somewhere in this section
 
 - notion that the BMI specification makes it relatively straightforward to add a language (or should this go under BMI?)
 
-(use figure from slide of `model' vs `component' and `model-as-wrapped-component'?)
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{Figures/model_to_component.pdf}
+\caption{When a numerical model program is `wrapped' with a standard interface and compiled as an importable module, it becomes an interoperable \textit{component}.}
+\label{fig:component}
+\end{figure}
+
 
 \subsection{Execution and Coupling Framework: pymt}
 
@@ -424,7 +432,19 @@ To address the second model-building task, Landlab provides two capabilities. Fi
 The Component base class was designed to expose a BMI such that conversion of Landlab Components to pymt components is trivial. 
 \todo[inline,color=yellow]{KRB: I think it would be best if Eric finished this section}
 
-Despite the name, Landlab is not restricted to terrestrial processes. Its component collection includes, for example, coastal and marine components for processes such as tidal circulation and deltaic sedimentation. More generally, its design is amenable to a wide variety of 2D grid-based numerical models and cellular automata applications beyond the earth and environmental sciences.
+Despite the name, Landlab is not restricted to terrestrial processes. Its component collection includes, for example, coastal and marine components for processes such as tidal circulation and deltaic sedimentation. More generally, its design is amenable to a wide variety of 2D grid-based numerical models and cellular automata applications beyond the earth and environmental sciences. Landlab can be used, for example, to construct integrated source-to-sink models that treat the full geologic cycle, tracking sediment from its creation on land to its deposition in marine basins (Figure~\ref{fig:riftisland}).
+
+\begin{figure*}
+\includegraphics[width=14cm]{Figures/LS-Overview.png}
+\caption{Illustration of HyLands model component. \textbf{a.} Time slices showing evolution of the landscape to steady state, without landsliding. The blue line represents the location of the river plotted in subplot (e). \textbf{b.} Same as (a), with landsliding. \textbf{c.} Sediment accumulation and the formation of alluvial fans. \textbf{d.} Landslide activity during the depicted time step. Red colors represent the logarithm of the landslide erosion, blue colors represent deposition. (e.) Shows the topographic and bedrock elevation (red and black line respectively) and the sediment thickness (orange line). The sediment flux is plotted against the right-hand y-axis (blue line). Note that, during landsliding, both pure landslide dams arise (red bumps on the profile) as well as irregularities in the bedrock profile (grey bumps). The latter originate from the river being redirected after landsliding, forming epigenetic gorges.}
+\label{fig:landslides}
+\end{figure*}
+
+\begin{figure}
+\includegraphics[width=10cm]{Figures/rift_island.pdf}
+\caption{Snapshot from an integrated numerical model of landscape and sedimentary basin evolution. Domain size is 250 by 250 km. Simulation shows a hypothetical micro-continent with an active NNE-oriented extensional fault. Sea level varies stochastically; this particular snapshot captures a relative lowstand. Model was constructed using Landlab components for flow routing (\textit{FlowAccumulator, FlowDirectorSteepest, LakeMapperBarnes}), fluvial processes (\textit{ErosionDeposition}), marine sediment transport (\textit{SimpleSubmarineDiffuser}), and extensional faulting (\textit{KinematicExtender}). Colormap designed by \citet{thyng2016true}.}
+\label{fig:riftisland}
+\end{figure}
 
 The design of Landlab supports a variety of usage styles. Interested users and/or developers may use Landlab to create models as Components, or as scripts that combine components. Alternatively, Landlab can be used to build stand-alone packages packages such as \texttt{terrainbento} \citep{barnhart2019terrainbento}, which combine Landlab Components into a predefined set of models.
 
@@ -435,6 +455,45 @@ The design of Landlab supports a variety of usage styles. Interested users and/o
 
 % - include mention of how a LL component gets converted to a pymt component
 
+\subsection{Example of a new model component: Landslides}
+  
+The modular infrastructure of Landlab enables the development of numerical tools in a quick and efficient manner. An example of a recently developed Landlab component is HyLands: a ``hybrid'' landscape evolution component that simulates mass wasting and sediment redistribution on hillslopes. The model was originally developed within proprietary software \citep{Campforts2020} and will now be available as an open source tool for the broader community. The grid engine and a wide variety of numerical tools available within the Landlab library enabled efficient implementation and provides capabilities for online coupling with other, existing Landlab components. An example is the Stream Power with Alluvium Conservation and Entrainment (SPACE) component which has been developed to simulate fluvial sediment transport and incision \citep{shobe2017space} and is showcased here as an example of model coupling in HyLands. 
+
+The integration capabilities of Landlab, where new and existing components can be combined in a straightforward way, opens up new possibilities for applied environmental engineering and fundamental scientific research. For HyLands in specific, the coupling of a deep-seated landslide algorithm with a sediment routing system will (i) help on a more applied level to explore the impact of future changes in storm frequency on landslide occurrence and sediment dynamics  \cite{Fan2019} and (ii) on a more fundamental level to facilitate the investigation of the interaction between landslides and sediment dynamics over geological timescales. The latter is illustrated in figure \ref{fig:landslides} where we use the Landlab software to simulate the impact of uplifting terrain on the formation of alluvial fans. Simulations are executed with and without landslide activity (figure \ref{fig:landslides}.a vs. figure \ref{fig:landslides}.b). Resulting magnitude frequency and area volume relationships for the simulated landslides are shown in figures \ref{fig:MF-landslides}. The evolution of the alluvial fans is further visualised in the movies listed in Table \ref{tab:LS-movies}. For details regarding the algorithms and physics supporting the HyLands component, see \citep{Campforts2020}. 
+
+\begin{figure*}
+\includegraphics[width=14cm]{Figures/LS-Overview.png}
+\caption{Illustration of HyLands model component. \textbf{a.} Time slices showing evolution of the landscape to steady state, without landsliding. The blue line represents the location of the river plotted in subplot (e). \textbf{b.} Same as (a), with landsliding. \textbf{c.} Sediment accumulation and the formation of alluvial fans. \textbf{d.} Landslide activity during the depicted time step. Red colors represent the logarithm of the landslide erosion, blue colors represent deposition. (e.) Shows the topographic and bedrock elevation (red and black line respectively) and the sediment thickness (orange line). The sediment flux is plotted against the right-hand y-axis (blue line). Note that, during landsliding, both pure landslide dams arise (red bumps on the profile) as well as irregularities in the bedrock profile (grey bumps). The latter originate from the river being redirected after landsliding, forming epigenetic gorges.}
+\label{fig:landslides}
+\end{figure*}
+
+\begin{figure*}[t]
+\includegraphics[width=10cm]{Figures/LS-Mag-Freq.png}
+\caption{(\textbf{a}) Magnitude-frequency relationship of the landslides simulated with Landlab-HyLands (red dots) and illustrated in figure \ref{fig:landslides}. (\textbf{Inset}) Scatter density plot showing the simulated Area-Volume relationship.}
+\label{fig:MF-landslides}
+\end{figure*}
+
+\begin{table}[htbp]
+    \Small
+    \topcaption{Simulation movies created with Landlab-HyLands}
+    \begin{tabular}{lll}
+        \hline
+        Scenario & Description & Link\\
+        \hline\hline
+        \verb|No landslides| &\verb|topography | & \url{https://youtu.be/c5d7T8eehxw} \\
+        \verb|| &\verb|location of longest river|& \url{https://youtu.be/GqokukWi9cs} \\
+        \verb|| &\verb|river profile |& \url{https://youtu.be/A_JZ9POfJ54} \\
+        \verb|| &\verb|sediment thickness |& \url{https://youtu.be/t0_tel5fhbM} \\
+        
+        \verb|Landslides| &\verb|topography | & \url{https://youtu.be/1K_ceKYt9Nw} \\
+        \verb|| &\verb|location of longest river|& \url{https://youtu.be/YkmbUTN7zlI} \\
+        \verb|| &\verb|river profile |& \url{https://youtu.be/jyWgKTcMe74} \\
+        \verb|| &\verb|sediment thickness |& \url{https://youtu.be/rwEBqGtHZs0} \\
+        \verb|| &\verb|landslide erosion and deposition |& \url{https://youtu.be/_xoSm7p4ZxI} \\
+    \hline
+   \end{tabular}
+   \label{tab:LS-movies}
+\end{table} 
 
 \subsection{OPTIONAL: Model analysis: Dakota and Dakotathon}
 
@@ -538,8 +597,6 @@ POTENTIAL ADDITIONAL FIGURES, BY SECTION:
 6.0 maybe a summary of csdms workbench?
 
 6.1 bmi: model to component figure from my slides? (already has hoch figure)
-
-6.2 babelizer: pie charts of usage
 
 6.3 pymt: s2s example of tb-type model + sed flux? permafrost? cem + waves? have a few here, from tutorials, with code snippets
 
