@@ -36,10 +36,15 @@
 \begin{itemize}
     \item Babelizer
     \item pymt
-    \item Dakota and Dakotathon
-    \item Review, edit, and add figures where needed
-    \item Acknowledgments
-    \item sw dev prax?
+    \item Add figures
+    \begin{itemize}
+        \item Model repo
+        \item Workbench
+        \item Babelizer
+        \item PyMT
+        \item Landlab
+        \item Community engagement / EKT
+    \end{itemize}
     \item Abstract
     \item Revisit title
     \item Editing pass
@@ -48,6 +53,14 @@
     \item Submit to EarthArxiv or equivalent
     \item Submit to book editors
 \end{itemize}
+
+Notes on model figure
+
+T: flood or LS, glacier? andy n?, LEM
+
+C: WLD?,  CEM?, RAFEM
+
+M: turbins, Waipaoa?, sequence or sed flux
 
 \section*{Abstract}
 
@@ -74,7 +87,15 @@ We start with a general background review of issues in scientific computing and 
 
 Computing has emerged as a new pillar of scientific inquiry, alongside theory, experiment, and direct observation  \citep{pitac2005computational}. The ability to perform calculations at speeds that would have astonished researchers of our grandparents' generation continues to open up new territory across the sciences, and allows us to probe the limits to predictability in natural and engineered systems \citep{post2005computational,post2013changing}. Computing, and the software that supports it, underlies numerous recent success stories, from improved hurricane forecasting to the imaging of black holes. 
 
-Within the sphere of computing, numerical modeling plays a central role. Computational models both encapsulate theory in the form of numerical algorithms, and provide machinery with which to explore the consequences of that theory. \citet{pipitone2012assessing}, for example, described climate models as ``executable theories of climate.'' More generally, numerical models in earth and environmental science embody executable theory for all sorts of aspects of the natural world. At the same time, the numerical algorithms and software that implements them provide a kind of mind-enhancing machinery. Whereas other scientific technology extends our senses---allowing us to ``see'' what lies beyond the visible spectrum, to ``feel'' the vibrations in the earth, to ``smell'' tiny amounts of this or that chemical in a sample---computational modeling extends our cognitive capacity. By turning ideas into algorithms, and algorithms into executable programs, we gain the ability to explore the logical consequences of our ideas, make predictions, and compare them with observations. Discovery comes not only when the calculations provide self-consistent explanations for otherwise mysterious phenomena, but also (especially) when the calculations surprise us, revealing a logic trail that leads to new insights \citep{bras2003six}.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=6in]{Figures/model_examples.pdf}
+\caption{Examples of Earth surface process models across a variety of domains and time scales, here focusing on models of sedimentary processes. (a) Probabilistic landslide occurrence \citep{strauch2018hydroclimatological}. (b) Catchment sediment yield \citep{carriere2020impact}. (c) Landform evolution \citep{barnhart2019terrainbento}. (d) Coastal and shelf dispersal of fluvially derived sediment \citep{kuehl2016source}. (e) Salt marsh evolution under tidal and sea-level forcing \citep{mariotti2018marsh}. (f) Delta evolution as a function of river and wave forcing \citep{ratliff2018exploring}. (g) Turbidity current dynamics \citep{nasr2013polydisperse}. (h) Submarine turbidity fan stratigraphy \citep{groenenberg2010flow}. (i) Sequence stratigraphy \citep{steckler2019developing}.}
+\label{fig:modelexamples}
+\end{figure}
+
+
+Within the sphere of computing, numerical modeling plays a central role. Computational models both encapsulate theory in the form of numerical algorithms, and provide machinery with which to explore the consequences of that theory. \citet{pipitone2012assessing}, for example, described climate models as ``executable theories of climate.'' More generally, numerical models in earth and environmental science embody executable theory for all sorts of aspects of the natural world (Figure~\ref{fig:modelexamples}). At the same time, the numerical algorithms and software that implements them provide a kind of mind-enhancing machinery. Whereas other scientific technology extends our senses---allowing us to ``see'' what lies beyond the visible spectrum, to ``feel'' the vibrations in the earth, to ``smell'' tiny amounts of this or that chemical in a sample---computational modeling extends our cognitive capacity. By turning ideas into algorithms, and algorithms into executable programs, we gain the ability to explore the logical consequences of our ideas, make predictions, and compare them with observations. Discovery comes not only when the calculations provide self-consistent explanations for otherwise mysterious phenomena, but also (especially) when the calculations surprise us, revealing a logic trail that leads to new insights \citep{bras2003six}.
 
 %Scientific computing encompasses more than just numerical modeling. Here our focus is primarily on computational algorithms that embody concepts about processes, as opposed to purely statistical methods. Nonetheless, it is worth considering that the distinction between computational modeling and other forms of scientific computing can be blurry. Consider, for example, that many forms of data processing, such as deriving a vegetation index map from a satellite image, involve applying some form of algorithmic theory to a set of quantitative observations. Likewise, some concepts that one might view as ``process based'' actually build on empirical correlations; for example, material stress-strain relationships usually derive from fitting curves to data from laboratory experiments.
 
@@ -225,8 +246,10 @@ The \textbf{CSDMS Workbench} is a suite of tools, standards, documents, and reso
     \item Data Components: small Python-language modules that use the BMI to fetch data from particular data sets.
     \item Landlab: a component-based Python library for model building and sharing of interoperable components \citep{hobley2017creative,barnhart2020short}.
 \end{enumerate}
+In the following we give a brief description of each of these elements, and how they combine to form a modular modeling system.
 
 \subsection{The Basic Model Interface (BMI) Standard}
+\label{sec:bmi}
 
 %- standardization: BMI
 
@@ -249,7 +272,7 @@ a steering wheel, brake pedal, and speedometer.
 %that are common to essentially all cars on the planet.
 Although we don't usually think of it this way,
 drivers across the globe benefit
-from a standard interface---a set of control mechanisms and information displays
+from a \textit{standard interface}---a set of control mechanisms and information displays
 that have %basically
 essentially the same design
 regardless of whether the car
@@ -391,21 +414,50 @@ enhanced the accuracy of peak discharge simulations.
 \label{fig:hoch_2019_fig6}
 \end{figure}
 %
-\citeauthor{hoch2019evaluating} conclude
+\citeauthor{hoch2019evaluating}\ conclude
 that ``Results confirm that model coupling can indeed be a viable way forward towards more integrated flood simulations. However, results also suggest that the accuracy of coupled models still largely depends on the model forcing.''
 
 \subsection{Language Interoperability: The Babelizer}
 \label{sec:babelizer}
 
-refer to Figure~\ref{fig:languages} somewhere in this section
+As we've described in Section~\ref{sec:bmi}, The Basic Model Interface describes
+a standardized set of functions (Table~\ref{tab:bmi}) that a software element must
+implement to become BMI-compliant. Although we have provided BMI
+specifications for four languages (C, C++, Fortran, and Python), the
+interface standard itself is language agnostic and additional bindings
+can be defined for any language. Looking at Figure~\ref{fig:languages},
+we notice that the landscape of software generated by the CSDMS community
+reflects a range of programming languages and, so, language-interoperability is critical
+to a coupling framework if it is to bring together this diverse set of components.
 
-- need a lingua franca; here, Python because of its popularity, num/sci libraries, and high-level interpreted nature
+Our approach to solve this problem is to choose a \textit{hub} language through
+which other languages will communicate. An advantage of this approach is that
+it allows us to only provide bridges from each supported language to the hub
+language rather than building bridges for each language to every
+other language (i.e. $N$-bridges rather than $N^2$-bridges). We have chosen Python
+to be our hub language for several reasons: it's open source, has a large user
+base in our community, has an active community that supports a vast library
+of 3rd-party packages (numpy, scipy, xarray, pandas, landlab, etc.), and,
+importantly, there are existing pathways to bring many other languages into Python.
 
-- babelizer: tools and procedures to take BMI'd code in C, C++, F, (Julia??) and convert to Python-callable module
+The \textit{babelizer} is a command-line utility we created to streamline the
+process of bringing a BMI component into Python. For libraries that expose a
+BMI, the \textit{babelizer} creates the necessary glue code to create a Python
+importable package that presents the BMI component as a Python class. We
+wrote the \textit{babelizer} to be easily extensible to additional languages but,
+presently, it can be used to wrap libraries written in C, C++ and Fortran
+using the \textit{cython} language.
+
+
+% refer to Figure~\ref{fig:languages} somewhere in this section
+
+% - need a lingua franca; here, Python because of its popularity, num/sci libraries, and high-level interpreted nature
+
+% - babelizer: tools and procedures to take BMI'd code in C, C++, F, (Julia??) and convert to Python-callable module
 
 
 
-- notion that the BMI specification makes it relatively straightforward to add a language (or should this go under BMI?)
+% - notion that the BMI specification makes it relatively straightforward to add a language (or should this go under BMI?)
 
 \begin{figure}[h!]
 \centering
@@ -427,15 +479,15 @@ refer to Figure~\ref{fig:languages} somewhere in this section
 
 \subsection{Data Components}
 
-Researchers rarely use numerical models in isolation. Working with models nearly always includes working with data sets too: both the data that go into a model as input, and the output data that the model produces (Table~\ref{tab:taxonomy}). Productivity suffers when these data sets are cumbersome to access and use. Just as model interface standards like BMI make it easier to work with numerical models, standardized methods for data access and retrieval can ease the burden of working with data. To that end, CSDMS has developed a programmatic approach that uses the BMI for data retrieval and access. Functions such as \texttt{initialize()} retrieve and open a data set, and \texttt{get\_value()} fetches particular data items or subsets. A program that uses the BMI to access items from a particular data set is known as a \textit{Data Component}. Using the same interface for model and data operation makes it easier to swap models and data sets; for example, one might compare use of model-calculated versus measured wave heights in a simulation of coastal sediment transport. [TODO: IF WE GET FAR ENOUGH, ADD MENTION OF COMPATIBILITY OF DATA COMPONENTS WITH LANGUAGE-SPECIFIC DATA LIBRARIES LIKE XARRAY]
+Researchers rarely use numerical models in isolation. Working with models nearly always includes working with data sets too: both the data that go into a model as input, and the output data that the model produces (Figure~\ref{fig:taxonomy}). Productivity suffers when these data sets are cumbersome to access and use. Just as model interface standards like BMI make it easier to work with numerical models, standardized methods for data access and retrieval can ease the burden of working with data. To that end, CSDMS has developed a programmatic approach that uses the BMI for data retrieval and access. Functions such as \texttt{initialize()} retrieve and open a data set, and \texttt{get\_value()} fetches particular data items or subsets. A program that uses the BMI to access items from a particular data set is known as a \textit{Data Component}. Using the same interface for model and data operation makes it easier to swap models and data sets; for example, one might compare use of model-calculated versus measured wave heights in a simulation of coastal sediment transport. Because CSDMS Data Components are written in Python, they can take advantage of data-management packages like \texttt{pandas} and \texttt{xarray}.
 
 The data components are designed to provide a consistent way to access various types of datasets (e.g., time series, raster grid, and multidimensional space-time data) and subsets of them without needing to know the original file formats. Each data component effectively `wraps' a dataset with a BMI. Data components can easily interact with BMI-enabled numerical models in the pymt modeling framework, or other similar frameworks.
 
-One example is the National Water Model (NWM) data component. This data component can access and subset the forecasted streamflow time series generated by the NWM hydrologic modelling framework. Figure \ref{fig:data_component1} shows an example of how the NWM data component can be used to get the streamflow data at a river channel for a flooding event. Figure \ref{fig:data_component2} shows the corresponding time series plot. This data component includes a set of standard control and query functions (e.g.,  \texttt{initialize()} , \texttt{update()}). These standard methods make the dataset easier to couple with BMI-enabled numerical models  without needing to know the time-series file format.
+One example is the National Water Model (NWM) data component. This data component can access and subset the forecasted streamflow time series generated by the NWM hydrologic modelling framework. Figure \ref{fig:data_component1} shows an example of how the NWM data component can be used to get the streamflow data at a river channel for a flooding event. Figure \ref{fig:data_component2} shows the corresponding time series plot. This data component includes a set of standard control and query functions (e.g.,  \texttt{initialize()}, \texttt{update()}). These standard methods make the dataset easier to couple with BMI-enabled numerical models  without needing to know the time-series file format.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.8]{Figures/nwm_example_notebook.pdf}
+\includegraphics[scale=0.85]{Figures/nwm_example_notebook.pdf}
 \caption{Screenshot of a JupyterNotebook demonstrating how to use nwm data component to access and subset streamflow dataset. }
 \label{fig:data_component1}
 \end{figure}
@@ -452,26 +504,36 @@ One example is the National Water Model (NWM) data component. This data componen
 
 Landlab is a Python-language library designed to support the creation, combination, and re-use of 2-D models \citep{hobley2017creative, barnhart2020short}. For the moment, let's presume that a model developer has identified input and output parameters, model state variables, and the governing equations and/or model rules. We might then synthesize the tasks of building the model (Section~\ref{sec:build}) into two types: (a) creating required data structures, and (b) implementing governing equations that act on those data structures. For example, most models need to represent the computational domain, including information (such as the current value of state variables) across the domain, and adjacency information describing how the different parts of the domain are connected to one another. This division is clearly simplistic, and neglects many intricacies, yet it captures the fundamental activities of model building. 
 
-Landlab provides re-usable software infrastructure that addresses the most common needs for our two model building tasks. For grid-based data structures, Landlab provides a \textit{grid} object to represent the computational domain and store \textit{fields} of state variables. Landlab provides multiple grid types through a similar interface (e.g., regular raster, network, regular hexagon, irregular). For all grid types, the adjacency information and access to fields follows the same interface---making it nearly trivial for a model to work on multiple grid types. 
+Landlab provides re-usable software infrastructure that addresses the most common needs for our two model-building tasks. For grid-based data structures, Landlab provides a \textit{grid} object to represent the computational domain and store \textit{fields} of state variables. Landlab provides several two-dimensional grid types, which all share the same underlying graph-based data structures and are accessed through a consistent interface. Current grid types include regular raster, network, regular hexagon, and unstructured (Delaunay/Voronoi). For all grid types, the adjacency information and access to fields follows the same interface---making it nearly trivial for a model to work on multiple grid types. 
 
-To address the second model-building task, Landlab provides two capabilities. First is a set of numerical utilities that support common needs. These include, for example, the ability to calculate differences, fluxes, and divergences of values stored at fields. Second is a library of \textit{Components}. In general, each Landlab component simulates a single process (e.g., stream power erosion, linear diffusion). Components are implemented as Python classes, and are derived from a common base class that enforces a minimum amount of model metadata for each model and defines common attributes. If a model, or part of model is implemented within Landlab as a Component, the model author need only write the code to instantiate a model, and to run it forward in time.
+To address the second model-building task, Landlab provides two capabilities. First is a set of numerical utilities that support common needs. These include, for example, the ability to calculate differences, gradients, fluxes, and divergences of values stored at fields. Second is a library of \textit{Components}. In general, each Landlab component simulates a single process, such as routing of shallow water flow across a terrain surface \citep{adams2017landlab}, calculating groundwater flow \citep{litwin2020groundwaterdupuitpercolator}, modeling sediment movement in a river network \citep{pfeiffer2020networksedimenttransporter}, or simulating biological evolution across a landscape \citep{lyons2020speciesevolver}. Components are implemented as Python classes, and are derived from a common base class that defines common attributes, and enforces a minimum set of metadata for each model. If a model, or part of model, is implemented within Landlab as a Component, the model author need only write the code to instantiate a model, and to run it forward in time.
 
-The Component base class was designed to expose a BMI such that conversion of Landlab Components to pymt components is trivial. 
-\todo[inline,color=yellow]{KRB: I think it would be best if Eric finished this section}
+The \textit{Component} base class was designed to expose a Basic Model Interface (BMI; Section~\ref{sec:bmi}), which allows a Landlab component to be used a BMI-enabled component.
+Although we do not expect most Landlab users to directly use this alternate interface, the
+component's BMI acts as a bridge that allows it to be incorporated into other BMI-friendly
+frameworks and tools (e.g. The \textit{pymt},\textit{dakotathon}).
 
-Despite the name, Landlab is not restricted to terrestrial processes. Its component collection includes, for example, coastal and marine components for processes such as tidal circulation and deltaic sedimentation. More generally, its design is amenable to a wide variety of 2D grid-based numerical models and cellular automata applications beyond the earth and environmental sciences. Landlab can be used, for example, to construct integrated source-to-sink models that treat the full geologic cycle, tracking sediment from its creation on land to its deposition in marine basins (Figure~\ref{fig:riftisland}).
+The Python Modeling Toolkit (\textit{pymt}; described in detail in Section~\ref{sec:pymt})
+if a model-coupling framework that provides tools for using and coupling BMI-enabled components,
+written in a range on programming languages, which may not have been written with the intent
+of operating within a coupling framework.
+Operating as a BMI component, Landlab components operate as isolated elements that no longer
+share a common grid and data, and requires an input file, which describes it's grid and data,
+to initialize itself. This is by design and required by the BMI so that a user interacts
+with the component as with any other BMI component without being aware of the inner workings
+of a Landlab component.
 
-\begin{figure*}
-\includegraphics[width=14cm]{Figures/LS-Overview.png}
-\caption{Illustration of HyLands model component. \textbf{a.} Time slices showing evolution of the landscape to steady state, without landsliding. The blue line represents the location of the river plotted in subplot (e). \textbf{b.} Same as (a), with landsliding. \textbf{c.} Sediment accumulation and the formation of alluvial fans. \textbf{d.} Landslide activity during the depicted time step. Red colors represent the logarithm of the landslide erosion, blue colors represent deposition. (e.) Shows the topographic and bedrock elevation (red and black line respectively) and the sediment thickness (orange line). The sediment flux is plotted against the right-hand y-axis (blue line). Note that, during landsliding, both pure landslide dams arise (red bumps on the profile) as well as irregularities in the bedrock profile (grey bumps). The latter originate from the river being redirected after landsliding, forming epigenetic gorges.}
-\label{fig:landslides}
-\end{figure*}
+% Through the such that conversion of Landlab Components to pymt components is trivial. 
+% \todo[inline,color=yellow]{KRB: I think it would be best if Eric finished this section}
+
+Despite the name, Landlab is not restricted to terrestrial processes. Its component collection includes, for example, components for coastal and marine processes such as tidal circulation and deltaic sedimentation. More generally, its design is amenable to a wide variety of 2D grid-based numerical models and cellular automata applications both within and beyond the earth and environmental sciences. Landlab can be used, for example, to construct integrated source-to-sink models that treat the full geologic cycle, tracking sediment from its creation on land to its deposition in marine basins (Figure~\ref{fig:riftisland}).
 
 \begin{figure}
 \includegraphics[width=10cm]{Figures/rift_island.pdf}
 \caption{Snapshot from an integrated numerical model of landscape and sedimentary basin evolution. Domain size is 250 by 250 km. Simulation shows a hypothetical micro-continent with an active NNE-oriented extensional fault. Sea level varies stochastically; this particular snapshot captures a relative lowstand. Model was constructed using Landlab components for flow routing (\textit{FlowAccumulator, FlowDirectorSteepest, LakeMapperBarnes}), fluvial processes (\textit{ErosionDeposition}), marine sediment transport (\textit{SimpleSubmarineDiffuser}), and extensional faulting (\textit{KinematicExtender}). Colormap designed by \citet{thyng2016true}.}
 \label{fig:riftisland}
 \end{figure}
+
 
 The design of Landlab supports a variety of usage styles. Interested users and/or developers may use Landlab to create models as Components, or as scripts that combine components. Alternatively, Landlab can be used to build stand-alone packages packages such as \texttt{terrainbento} \citep{barnhart2019terrainbento}, which combine Landlab Components into a predefined set of models.
 
@@ -482,11 +544,11 @@ The design of Landlab supports a variety of usage styles. Interested users and/o
 
 % - include mention of how a LL component gets converted to a pymt component
 
-\subsection{Example of a new model component: Landslides}
+\subsubsection{HyLands: an example of a component-based integrated model}
   
-The modular infrastructure of Landlab enables the development of numerical tools in a quick and efficient manner. An example of a recently developed Landlab component is HyLands: a ``hybrid'' landscape evolution component that simulates mass wasting and sediment redistribution on hillslopes. The model was originally developed within proprietary software \citep{Campforts2020} and will now be available as an open source tool for the broader community. The grid engine and a wide variety of numerical tools available within the Landlab library enabled efficient implementation and provides capabilities for online coupling with other, existing Landlab components. An example is the Stream Power with Alluvium Conservation and Entrainment (SPACE) component which has been developed to simulate fluvial sediment transport and incision \citep{shobe2017space} and is showcased here as an example of model coupling in HyLands. 
+The modular design of Landlab enables the development of numerical tools in a quick and efficient manner. An example of a recently developed Landlab-built model is HyLands: a ``hybrid'' landscape evolution model that simulates mass wasting and sediment redistribution on hillslopes. The model was originally developed within proprietary software \citep{campforts2020hylands}; translating the original code into Landlab converts the original product into an open source tool for the broader community, and provides a new process component to simulate landsliding. The grid engine and a wide variety of numerical tools available within the Landlab library enabled efficient implementation and provides capabilities for online coupling with other, existing Landlab components. An example is the Stream Power with Alluvium Conservation and Entrainment (SPACE) component which has been developed to simulate fluvial sediment transport and incision \citep{shobe2017space} and is showcased here as an example of model coupling in HyLands. 
 
-The integration capabilities of Landlab, where new and existing components can be combined in a straightforward way, opens up new possibilities for applied environmental engineering and fundamental scientific research. For HyLands in specific, the coupling of a deep-seated landslide algorithm with a sediment routing system will (i) help on a more applied level to explore the impact of future changes in storm frequency on landslide occurrence and sediment dynamics  \cite{Fan2019} and (ii) on a more fundamental level to facilitate the investigation of the interaction between landslides and sediment dynamics over geological timescales. The latter is illustrated in figure \ref{fig:landslides} where we use the Landlab software to simulate the impact of uplifting terrain on the formation of alluvial fans. Simulations are executed with and without landslide activity (figure \ref{fig:landslides}.a vs. figure \ref{fig:landslides}.b). Resulting magnitude frequency and area volume relationships for the simulated landslides are shown in figures \ref{fig:MF-landslides}. The evolution of the alluvial fans is further visualised in the movies listed in Table \ref{tab:LS-movies}. For details regarding the algorithms and physics supporting the HyLands component, see \citep{Campforts2020}. 
+The integration capabilities of Landlab, where new and existing components can be combined in a straightforward way, opens up new possibilities for applied environmental engineering and fundamental scientific research. For HyLands in specific, the coupling of a deep-seated landslide algorithm with a sediment routing system will (i) help on a more applied level to explore the impact of future changes in storm frequency on landslide occurrence and sediment dynamics  \cite{Fan2019} and (ii) on a more fundamental level to facilitate the investigation of the interaction between landslides and sediment dynamics over geological timescales. The latter is illustrated in figure \ref{fig:landslides} where we use the Landlab software to simulate the impact of uplifting terrain on the formation of alluvial fans. Simulations are executed with and without landslide activity (Figure \ref{fig:landslides}a vs.\ Figure \ref{fig:landslides}b). Resulting magnitude frequency and area volume relationships for the simulated landslides are shown in figures \ref{fig:MF-landslides}. The evolution of the alluvial fans is further visualised in the movies listed in Table \ref{tab:LS-movies}. For details regarding the algorithms and physics supporting the HyLands component, see \citep{campforts2020hylands}. 
 
 \begin{figure*}
 \includegraphics[width=14cm]{Figures/LS-Overview.png}
@@ -522,28 +584,28 @@ The integration capabilities of Landlab, where new and existing components can b
    \label{tab:LS-movies}
 \end{table} 
 
-\subsection{OPTIONAL: Model analysis: Dakota and Dakotathon}
+%\subsection{OPTIONAL: Model analysis: Dakota and Dakotathon}
 
-- do we want to include this?
+%- do we want to include this?
 
-\section{Software Development Practices}
+%\section{Software Development Practices}
 
-- VC
+%- VC
 
-- testing and CI
+%- testing and CI
 
-- creating the documentation (and how much is enough?)
-   - API documentation vs examples (typically notebooks)
+%- creating the documentation (and how much is enough?)
+%   - API documentation vs examples (typically notebooks)
 
-- collaboration: issues and PRs
+%- collaboration: issues and PRs
 
 
 \section{Community Engagement}
 \label{sec:community}
 
-One of CSDMS' major activities has been the creation of a thriving community around earth-surface dynamics modeling \citep{overeem2013strategies}. As of 2020, over 1,900 members, representing 552 institutions (144 US academic) and 71 countries, had joined the community.  CSDMS is, by design, a broad and deep coalition of members from disciplines reflected by the five Working Groups and seven Focus Research Groups (Figure~\ref{fig:groups}).  From its inception, CSDMS has encouraged trans-disciplinarity by providing opportunities such as annual meetings, workshops, hackathons, and training events for domain scientists to interact with colleagues from other earth and social science disciplines.  These connections are essential for knowledge exchange among community efforts and allow for wider penetration of new technology and ideas. Cross-pollination of ideas from these events and other community-member interactions have lead to a variety of independently funded research projects. CSDMS has played a key role in shifting the paradigm for open code sharing in the earth surface processes by facilitating resource sharing through model, data, and education repositories on the CSDMS web portal.  CSDMS also offers a variety of services to community processes and the geoscience subdiscipline of interest.  But along with their disciplinary expertise, however, they also need a strong foundation in programming, advanced computing skills and data analytics skills \citep{atkins2011national}.
+One of CSDMS' major activities has been the creation of a thriving community around earth-surface dynamics modeling \citep{overeem2013strategies}. As of 2020, nearly 2,000 members, representing 552 institutions (144 US academic) and 71 countries, had joined the community.  CSDMS is, by design, a broad and deep coalition of members from disciplines reflected by the five Working Groups and seven Focus Research Groups (Figure~\ref{fig:groups}).  From its inception, CSDMS has encouraged trans-disciplinarity by providing opportunities such as annual meetings, workshops, hackathons, and training events for domain scientists to interact with colleagues from other earth and social science disciplines.  These connections are essential for knowledge exchange among community efforts and allow for wider penetration of new technology and ideas. Cross-pollination of ideas from these events and other community-member interactions have lead to a variety of independently funded research projects. CSDMS has played a key role in shifting the paradigm to open code sharing in the earth surface processes by facilitating resource sharing through model, data, and education repositories on the CSDMS web portal.  CSDMS also offers a variety of services to community processes and the geoscience subdiscipline of interest.  But along with their disciplinary expertise, researchers who work with computational models also need a strong foundation in programming, advanced computing, and data analytics  \citep{atkins2011national}.
 Traditional Earth science education does not usually equip students with skills to use modern cyberinfrastructure and computing resources efficiently, or to become model developers \citep{campbell2013taking}. The Earth Surface Processes (ESP) community critically needs a platform to teach modern programming practices and high-performance computing methods to develop innovative models that can be used to understand and predict how the earth’s surface responds to environmental change and human influence.
-The practice of modeling lies at the core of predictive ESP sciences, and educators should engage students in building, testing, and applying models \citep{hestenes1996modeling,manduca2008making}, but we found from a review of course catalogs that in practice the undergraduate curricula of more traditional disciplinary focused departments do not include this component \citep{campbell2013taking}. This issue is not entirely unique to ESP sciences. The geosciences today are intensively quantitative, and there is an urgent need for a workforce with strong STEM skills \citep{national2012discipline}. The United States' National Science Foundation (NSF) recognizes as one of its `10 Big Ideas' that pathways are needed for educators to create a 21st-century workforce capable of effectively dealing with data [ED Ofﬁce of Educational Technology, 2017]. Moreover, an agile STEM workforce is considered a national priority \citep{atkins2011national}. Realizing this, CSDMS provides hands-on training opportunities during meetings. Some efforts are meant to built foundation---for example, by teaching graduate students skills in best programming practices and version controls in day-long short courses. Other outreach efforts consist of short clinics, targeted to give potential users of cyberinfrastructure an active feel for certain models or modeling techniques, or to provide an update to experts on new developments.  More extensive separately organized hackathons bring together small science teams to work on solutions for more specific outstanding research problems.  For the first time in 2020, an immersive Earth Surface Processes Summer Institute is being organized online for a large group of students and early career scientists, focused solely on capacity building for East Surface Processes modeling.
+The practice of modeling lies at the core of predictive ESP sciences, and educators should engage students in building, testing, and applying models \citep{hestenes1996modeling,manduca2008making}, but we found from a review of course catalogs that in practice the undergraduate curricula of more traditional discipline-focused departments do not include this component \citep{campbell2013taking}. This issue is not entirely unique to ESP sciences. The geosciences today are intensively quantitative, and there is an urgent need for a workforce with strong STEM skills \citep{national2012discipline}. The United States' National Science Foundation (NSF) recognizes as one of its `10 Big Ideas' that pathways are needed for educators to create a 21st-century workforce capable of effectively dealing with data \citep{king2017reimagining}. Moreover, an agile STEM workforce is considered a national priority \citep{atkins2011national}. Realizing this, CSDMS provides hands-on training opportunities during meetings. Some efforts are meant to built foundation---for example, by teaching graduate students skills in best programming practices and version controls in day-long short courses. Other outreach efforts consist of short clinics, targeted to give potential users of cyberinfrastructure an active feel for certain models or modeling techniques, or to provide an update to experts on new developments.  More extensive separately organized hackathons bring together small science teams to work on solutions for more specific outstanding research problems.  In 2020, CSDMS inaugurated an immersive Earth Surface Processes Summer Institute for students and early career scientists, focused on capacity building for earth-surface processes modeling.
 
 \begin{figure}[h!]
 \centering
@@ -556,27 +618,27 @@ The practice of modeling lies at the core of predictive ESP sciences, and educat
 \section{Discussion}
 \label{sec:discussion}
 
-In May 2020, the US National Science Foundation released a special report, prepared by the National Academy, on research opportunities in the earth sciences. The report highlighted three unique types of research infrastructure: instrumentation, human infrastructure, and cyberinfrastructure. The recognition of cyberinfrastructure as a distinct form of research infrastructure signifies the critical role that computing now plays in the earth and environmental sciences. Environmental modelling, and the software and culture-of-practice that supports it, constitutes a key part of that cyberinfrastructure. In other words, research software is infrastructure, and deserving of the same care and attention as a laboratory or field station.
+In May 2020, the US National Science Foundation released a special report, prepared by the National Academy, on research opportunities in the earth sciences. The report highlighted three unique types of research infrastructure: instrumentation, human infrastructure, and cyberinfrastructure. The report's recognition of cyberinfrastructure as a distinct form of research infrastructure is one indication of the critical role that computing now plays in the earth and environmental sciences. Environmental modelling, and the software and culture-of-practice that support it, constitutes a key part of that cyberinfrastructure. In other words, research software \textit{is} infrastructure, and deserving of the same care and attention as a laboratory or field station. So too are the professional research software engineers who devote their expertise to helping the community do computational work more efficiently, effectively, and sustainably.
 
-The research enterprise benefits when modeling  software and tools are shared, coordinated, and interoperable, such that the six model operation tasks listed in Table~\ref{tab:taxonomy} are simplified. For the earth surface sciences, the CSDMS Model Repository provides a community platform for finding and sharing model codes and related tools. In addition to acting as a valuable community resource, the Repository provides a solution to the growing mandate from journals and funding agencies to make research software openly available. The provision of standardized metadata and bibliographic information helps those who are looking for models to compare and evaluate the alternatives.
+The research enterprise benefits when modeling  software and tools are shared, coordinated, and interoperable, such that the six model operation tasks listed in Figure~\ref{fig:taxonomy} can be done efficiently and effectively. For the earth surface sciences, the CSDMS Model Repository provides a community platform for finding and sharing model codes and related tools. In addition to acting as a valuable community resource, the Repository provides a solution to the growing mandate from journals and funding agencies to make research software openly available. The provision of standardized metadata and bibliographic information helps those who are looking for models to compare and evaluate the alternatives.
 
-Simply providing source code and metadata is not enough, however. In order for earth and environmental models to function as community resources, they must be usable. One of the key dimensions of usability is interoperability. The BMI standard promotes interoperability by reducing the learning curve for executing and querying models, and by greatly simplifying the process of linking (one way) or coupling (two way) models. A model program equipped with a BMI becomes an interoperable, standardized component: an element of a system, rather than an idiosyncratic stand-alone product. One of the key abilities offered by a BMI-enabled model is run-time control, query, and modification. Because BMI supports step-wise execution, a user can effectively pause a model in mid-run to inspect its state variables, and modify parameters or data. This capability allows sequential coupling of models using simple scripts. The ability to query and modify values also enables tight coupling. For example, if a collection of component models are treated as representing individual terms in a governing equation, a coupling script could be used to query each component's derivatives, construct a matrix, solve it, and then pass the updated state variables back to the individual components.
+Simply providing source code and metadata is not enough, however. In order for earth and environmental models to function as community resources, they must be usable, and one of the key dimensions of usability is interoperability. The BMI standard promotes interoperability by reducing the learning curve for executing and querying models, and by greatly simplifying the process of linking (one way) or coupling (two way) models. A model program equipped with a BMI becomes an interoperable, standardized component: an element of an integrated system, rather than an idiosyncratic stand-alone product. One of the key abilities offered by a BMI-enabled model is run-time control, query, and modification. Because BMI supports step-wise execution, a user can effectively pause a model in mid-run to inspect its state variables, and modify parameters or data. This capability allows sequential coupling of models using simple scripts. The ability to query and modify values also enables tighter coupling. For example, if  component models are treated as representing individual terms in a governing equation, a coupling script can use BMI functions to query each component's derivatives, construct a matrix, solve it, and then pass the updated state variables back to the individual components.
 
 One advantage of BMI is that it is language agnostic, and can in principle be implemented in nearly any programming language. It can, for example, accommodate legacy codes written in Fortran. The disadvantage of language flexibility is that BMI addresses the least common denominator, and therefore does not take advantage of the more advanced features available in some languages, such as object-oriented capabilities. To some extent this disadvantage can be addressed by building more specialized, language-specific interfaces in parallel with a BMI. For example, Landlab components, which are implemented as classes, use a lightweight, Python-specific interface that takes advantage of that language's object-oriented capabilities, advanced data types, and parameter-passing syntax. At the same time, Landlab also includes functionality to translate any of its components into a standard BMI component, so they can be integrated with components written in other languages.
 
-The flexibility that BMI offers has led to its adoption in a variety of different applications, including US Geological Survey rainfall-runoff models \ref{}, hydrodynamic modeling (including flagship models developed by Deltares and the Netherlands eScience Center) \ref{}, delta and coastline evolution modeling \ref{ratliff2018}, and modeling of methane emissions \ref{fox2020agent}, to name a few. One disadvantage of a standard interface like BMI is the extra up-front investment in program development. Researchers may not perceive value in adding a standard interface to a legacy code, or writing it into a new code. However, our experience is that this effort usually more than pays for itself over the duration of a project. Code written to a standard like BMI tends to be more modular and therefore easier to maintain. Existing templates for common languages in the earth and environmental sciences make the process of providing a BMI to a new program is relatively painless: just a matter of filling in a set of pre-defined function names and signatures \citep{hutton2020basic}. Adding a BMI to an existing legacy model can be a bit more involved, depending on how the program code is structured, because it often requires some degree of refactoring. Even in that case, we find that adding a BMI to a legacy model often makes that code more understandable and adaptable.
+The flexibility that BMI offers has led to its adoption in a variety of different applications, including US Geological Survey rainfall-runoff models \citep{markstrom2015prms,regan2018description,regan2019us}, hydrodynamic modeling (including flagship models developed by Deltares and the Netherlands eScience Center) \citep{hoch2019advancing,hoch2019evaluating}, delta and coastline evolution modeling \citep{ratliff2018exploring}, and modeling of methane emissions \citep{fox2020agent}, to name a few. One disadvantage of a standard interface like BMI is the extra up-front investment in program development. Researchers may not perceive value in adding a standard interface to a legacy code, or writing it into a new code. However, our experience is that this effort usually more than pays for itself over the duration of a project. Code written to a standard like BMI tends to be more modular and therefore easier to maintain. Existing templates for common languages in the earth and environmental sciences make the process of providing a BMI to a new program is relatively painless: just a matter of filling in a set of pre-defined function names and signatures \citep{hutton2020basic}. Adding a BMI to an existing legacy model can be a bit more involved, depending on how the program code is structured, because it often requires some degree of refactoring. Even in that case, we find that adding a BMI to a legacy model often makes that code more understandable and adaptable.
 
-The variety of different programming languages used in the earth and environmental sciences community presents a barrier to interoperability. The majority of models and tools in the CSDMS Repository are written in C, C++, Fortran, Python, and Matlab \ref{}[ADD FIGURE]. Other languages used in CSDMS constituent communities include R (especially in ecosystem dynamics) and NetLogo's java-based scripting language (for agent-based modeling). Crossing the language barrier requires language-bridging tools. Translating all of the existing code into a single, common language would be impractical, even if the community could agree on which language to use. A more effective solution is to \textit{librarize} models and tools \citep{brown2014run} as components that can be accessed and executing through a high-level scripting language. In CSDMS' case, the Babelizer tool provides this capability for codes written in C, C++, and Fortran, using Python as the high-level linga franca.
+The variety of different programming languages used in the earth and environmental sciences community presents a barrier to interoperability. The majority of models and tools in the CSDMS Repository are written in C, C++, Fortran, Python, and Matlab (Figure~\ref{fig:languages}). Other languages used in CSDMS constituent communities include R (especially in ecosystem dynamics) and NetLogo's java-based scripting language (for agent-based modeling). Julia, a relatively new high-level language oriented toward numerical computing, also seems to be growing in popularity in the science community. Crossing the language barrier requires language-bridging tools. Translating the existing wealth of legacy code into a single, common language would be impractical, even if the community could agree on which language to use. A more effective solution is to \textit{librarize} models and tools \citep{brown2014run} as components that can be accessed and executing through a high-level scripting language. In CSDMS' case, the Babelizer tool provides this capability for codes written in C, C++, and Fortran, using Python as the high-level lingua franca.
 
 Librarization can be applied to data sets too. The CSDMS Workbench accomplishes this with Data Components that provide function-call access to various data sets. Using the BMI syntax for data access removes the need to worry about data formats, and makes it easier to swap between data sets and models (for example, data versus model of ocean-wave properties) as components in a linked system. In this case, the BMI does not replace the more sophisticated data-access capabilities of a language-specific library like xarray, but it has the advantage of providing a consistent interface across multiple languages.
 
-For building and modifying numerical models, the CSDMS Workbench provides Landlab as a Python-specific solution for 2D, grid-based applications. Experience with Landlab since its introduction has shown that a library of model `building blocks' can greatly reduce the barriers to the software side of model creation. One indicator of the success of this approach is the growing number of  Landlab-built models created by doctoral students as part of a larger body of dissertation research \citep[e.g.,][]{adams2017landlab,gray2017off,shobe2017space,lai2018modeled,langston2018developing,schmid2018effect,strauch2018hydroclimatological,glade2019canyon,reitman2019offset,carriere2020impact,litwin2020groundwaterdupuitpercolator}. The ability to assemble models out of reusable `process components' allows for rapid construction of complete, multi-element models. One example of the value of rapid model assembly is a recent  comparative testing and calibration study of long-term landform evolution models \citep{barnhart2020inverting1,barnhart2020inverting2}. The study authors used Landlab to develop a Python package for multi-model analysis of drainage basin evolution \citep{barnhart2019terrainbento}. The package allowed for the exploration and testing of 37 mathematically distinct models, as alternative hypotheses. This example illustrates how flexible, component-based modeling software promotes hypothesis testing. 
+For building and modifying numerical models, the CSDMS Workbench provides Landlab as a Python-specific solution for 2D, grid-based applications. Experience with Landlab since its introduction has shown that a library of model `building blocks' can greatly reduce the barriers to the software side of model creation. One indicator of the success of this approach is the growing number of  Landlab-built models created by doctoral students as part of a larger body of dissertation research \citep[e.g.,][]{adams2017landlab,gray2017off,shobe2017space,lai2018modeled,langston2018developing,schmid2018effect,strauch2018hydroclimatological,glade2019canyon,reitman2019offset,carriere2020impact,litwin2020groundwaterdupuitpercolator}. The ability to assemble models out of reusable `process components' allows for rapid construction of complete, multi-element models. One example of the value of rapid model assembly is a recent  comparative testing and calibration study of long-term landform evolution models \citep{barnhart2020inverting1,barnhart2020inverting2}. The study authors used Landlab to develop a Python package for multi-model analysis of drainage basin evolution \citep{barnhart2019terrainbento}. The package allowed for the exploration and testing of 37 mathematically distinct models, as alternative hypotheses---a feat that would not have been possible with a traditional monolithic modeling code. This example illustrates how flexible, component-based modeling software promotes hypothesis testing. 
 
 Experience with BMI, pymt, and Landlab highlights the critical importance of documentation, consistent with the findings of \citet{lawrence2015science}. Tutorial examples in particular provide a starting point that users can build on. Embedding tutorials in Jupyter Notebooks provides an effective way to combine descriptive text, program code, plots, and formatted mathematics. For reference-level documentation, document generator tools like Sphinx and doxygen translate internal documentation (comment blocks inside source code) into nicely formatted, web-accessible reference material.
 
 A successful community cyberinfrastructure for numerical modeling requires more than just technology. It also takes community building and coordination. In the case of CSDMS, the community centers around common interest in a broader theme (earth-surface processes) and a common approach (modeling). Activities such as meetings, workshops, hackathons, and webinars can help draw attention new of tools and methods, provide education in their use, and contribute to building a culture of resource sharing.
 
-One of the biggest challenges to a fully functional community software ecosystem in earth and environmental modeling is the paucity of technical training. As noted earlier, many geoscientists are self-taught programmers, and generally unaware of practices and tools that would make their work more efficient and sustainable. CSDMS and other community facilities have had some success in addressing this need with workshops, webinars, and summer schools, but there remains a need to scale up these efforts. Geoscience researchers should not need the equivalent of a computer science degree to perform computational research, but in our experience there is a basic set of skills that do make a difference, and which few geoscientists possess. Potential solutions range from regular university-based, geoscience-oriented courses, to focused, community-led summer courses (like CSDMS' ESPIN, or the IsoCamp program for isotope geochemistry), to fully online courses. Questions of credit and funding inevitably arise, as does the issue of how to squeeze more material into already-packed curricula.  
+One of the biggest challenges to a fully functional community software ecosystem in earth and environmental modeling is the paucity of technical training. As noted earlier, many geoscientists are self-taught programmers, and generally unaware of practices and tools that would make their work more efficient and sustainable. CSDMS and other community facilities have had some success in addressing this need with workshops, webinars, and summer schools, but there remains a need to scale up these efforts. Geoscience researchers should not need the equivalent of a computer science degree to perform computational research, but in our experience there is a basic set of skills that do make a difference, and which relatively few geoscientists possess. Potential solutions range from regular university-based, geoscience-oriented courses, to focused, community-led summer courses (like CSDMS' ESPIN, or the IsoCamp program for isotope geochemistry), to fully online courses. Questions of credit and funding inevitably arise, as does the issue of how to squeeze more material into already-packed curricula.  
 
 Another challenge revolves around incentives. The community as a whole clearly benefits from a FAIR and sustainable research software ecosystem. As noted above, the advent of software journals and peer-reviewed repositories (such as COMSESnet and pyopensci) provides one mechanism to encourage the creation of lasting digital products. The reproducibility movement provides another useful push, and has led journals and funding agencies to raise their standards for sharing and accessibility of software and other digital products. To take advantage of this momentum, hiring and promotion committees at universities and research organizations need to acknowledge the value of contributions to high-quality research software. Professional societies can contribute by offering awards that recognize contributions to cyberinfrastructure.
 
@@ -587,7 +649,7 @@ Computational modeling in the earth and environmental sciences has come a long w
 
 \section{Acknowledgements}
 
-NSF-EAR 1725774 to Barnhart. CSDMS and Landlab awards.
+The Community Surface Dynamics Modeling System (CSDMS) is supported by the US National Science Foundation (NSF) (1831623). Initial development of Landlab was supported by the NSF SI2 program (1450409). Additional sources of support include EarthCube (2026951 to GT and EH), an NSF postdoctoral fellowship (1725774 to KRB), and  ...[ADDITIONAL SOURCES HERE]
 
 
 \bibliography{gt_library}
