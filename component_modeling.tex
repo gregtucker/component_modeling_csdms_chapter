@@ -18,7 +18,8 @@
 
 % See the ``Article customise'' template for come common customisations
 
-\title{Numerical modeling of Earth's dynamic surface: a community approach}
+\title{CSDMS: A Community Platform for Numerical Modeling of Earth-Surface Processes}
+
 
 
 
@@ -41,7 +42,7 @@
 \affil[3]{Institute for Arctic and Alpine Research (INSTAAR), University of Colorado Boulder}
 \affil[4]{Current address: Landslide Hazards Group, US Geological Survey}
 
-\date{Preprint submitted to EarthArXiv, February 2021 (not peer reviewed)} % delete this line to display the current date
+\date{Preprint submitted to Geoscientific Model Development, June 2021} % delete this line to display the current date
 
 % Uncomment to override  the `A preprint' in the header
 \renewcommand{\headeright}{Technical Report / Preprint}
@@ -66,7 +67,7 @@
 
 \section*{Abstract}
 
-Computational modelling occupies a unique niche in Earth environmental sciences. Models serve not just as scientific technology and infrastructure, but also as digital containers of the scientific community's understanding of the natural world. As this understanding improves, so too must the associated software. This dual nature---models as both infrastructure and hypotheses---means that modelling software must be designed to evolve continually as geoscientific knowledge itself evolves. Here we describe design principles, protocols, and tools developed by the Community Surface Dynamics Modeling System (CSDMS) to promote a flexible, interoperable, and ever-improving research software ecosystem. These include a community repository for model sharing and metadata, interface and ontology standards for model interoperability, language bridging tools, a modular programming library for model construction, modular software components for data access, and a Python-based execution and model-coupling framework. Methods of community support and engagement that help create a community-centered software ecosystem are also discussed.
+Computational modelling occupies a unique niche in Earth and environmental sciences. Models serve not just as scientific technology and infrastructure, but also as digital containers of the scientific community's understanding of the natural world. As this understanding improves, so too must the associated software. This dual nature---models as both infrastructure and hypotheses---means that modelling software must be designed to evolve continually as geoscientific knowledge itself evolves. Here we describe design principles, protocols, and tools developed by the Community Surface Dynamics Modeling System (CSDMS) to promote a flexible, interoperable, and ever-improving research software ecosystem. These include a community repository for model sharing and metadata, interface and ontology standards for model interoperability, language bridging tools, a modular programming library for model construction, modular software components for data access, and a Python-based execution and model-coupling framework. Methods of community support and engagement that help create a community-centered software ecosystem are also discussed.
 
 \section{Introduction}
 
@@ -838,6 +839,11 @@ Another challenge revolves around incentives. The community as a whole clearly b
 The third major challenge is support. Our experience with CSDMS demonstrates that a modest investment in community-oriented computing can have a substantial positive impact on research productivity. By investing in stable community repositories, interoperability standards, and software libraries and frameworks, a funding agency can increase the impact of its portfolio by incentivizing a shared, reusable and ever-improving community infrastructure of models, tools, and expertise. A key to making this approach scalable, in addition to incentives, is to provide sufficient documentation and consulting support to enable community members to create research cybertools that are Findable, Accessible, Interoperable, and Reusable. We have found from our own experience that consulting support is an especially important piece. Projects that include a professional research software engineer in their team---even if it is just at the level of general design advice, informal education, or help overcoming technical obstacles---tend to be much more likely to produce robust, flexible, sustainable software as a lasting broader impact of a project.
 
 Computational modeling in the Earth and environmental sciences has come a long way since the dawn of the 3rd millennium. The possibilities of a coordinated, community-wide cyber-ecosystem are starting to emerge. Fully achieving this vision will require a combination of education, incentives, and support. Universities, research agencies, and individual researchers all have a role to play.
+
+
+\section{Code Availability}
+
+The current versions of the various elements in the CSDMS Workbench software suite () are available under the MIT licence. As of this writing, Landlab code, documentation, and tutorials are available in a git version-control repository on the GitHub hosting site at \url{https://github.com/landlab/landlab}. Documentation can be accessed at \url{https://landlab.github.io}. Current versions of software, technical specifications, documentation, and other resources for other Workbench elements (BMI, babelizer, pymt, model and data components) are managed on GitHub under the CSDMS organization (\url{https://github.com/csdms}). Online documentation for BMI, pymt, and babelizer is presently hosted on the Read the Docs platform (for example, \url{https://bmi.readthedocs.io}, and similarly for pymt and babelizer). The exact version of the CSDMS Workbench software and related resources discussed in this paper is archived on Zenodo (citation), as are input data and scripts associated with Figures 8--14.
 
 
 \section{Acknowledgements}
